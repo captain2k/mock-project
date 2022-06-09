@@ -1,15 +1,13 @@
-import { Checkbox, Form, Input, Modal, TimePicker } from 'antd'
+import { Button, Checkbox, Form, Input, Modal, TimePicker } from 'antd'
 import moment from 'moment'
 import { useState } from 'react'
-import RegisterForgetFooter from './RegisterForgetFooter'
-
-// moment(new Date()).format('YYYY-MM-DD HH:mm')
+import MESSAGE_REQUIRED from '../../../common/message'
+import './RegisterForget.scss'
 function RegisterForget() {
   const [isModalVisible, setIsModalVisible] = useState(true)
-  const registrationDate = moment(new Date()).format('YYYY-MM-DD HH:mm')
-  const registerForDate = moment(new Date()).format('YYYY-MM-DD')
+  const registrationDate = moment(new Date()).format('DD-MM-YYYY HH:mm')
+  const registerForDate = moment(new Date()).format('DD-MM-YYYY')
   const format = 'HH:mm'
-  const [checkin, setCheckin] = useState(moment('00:00', 'HH:mm'))
   const handleOk = () => {
     setIsModalVisible(false)
   }
@@ -33,42 +31,57 @@ function RegisterForget() {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={<RegisterForgetFooter onFinish={onFinish} />}
+        footer={false}
       >
-        <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
-          <Form.Item label="Registration date" name="Registration date">
-            <Input defaultValue={registrationDate} bordered={false} />
+        <Form
+          className="register-forget"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          initialValues={{
+            registration_date: registrationDate,
+            register_for_date: registerForDate,
+            checkin: moment('08:00', format),
+            checkout: moment('17:00', format),
+          }}
+          labelCol={{ sm: { span: 9 }, lg: { span: 6 }, md: { span: 7 } }}
+          labelAlign={'left'}
+        >
+          <Form.Item label="Registration date:" name="registration_date">
+            <Input bordered={false} readOnly />
           </Form.Item>
-          <Form.Item label="Register for date" name="Register for date">
-            <Input defaultValue={registerForDate} bordered={false} />
+          <Form.Item label="Register for date:" name="register_for_date">
+            <Input bordered={false} readOnly />
           </Form.Item>
           <Form.Item
-            label="Checkin"
-            name="Checkin"
-            rules={[{ required: true, message: 'Can not empty' }]}
+            label="Checkin:"
+            name="checkin"
+            rules={[{ required: true, message: MESSAGE_REQUIRED }]}
           >
-            <TimePicker
-              defaultValue={moment('00:00', format)}
-              format={format}
+            <TimePicker format={format} />
+          </Form.Item>
+          <Form.Item
+            label="Checkout:"
+            name="checkout"
+            rules={[{ required: true, message: MESSAGE_REQUIRED }]}
+          >
+            <TimePicker format={format} />
+          </Form.Item>
+          <Form.Item label="Special reason:" name="special_reason">
+            <Checkbox.Group
+              options={[
+                'Check-in not counted as error',
+                'Check-out not counted as error',
+              ]}
             />
           </Form.Item>
-          <Form.Item
-            label="Checkout"
-            name="Checkout"
-            rules={[{ required: true, message: 'Can not empty' }]}
-          >
-            <TimePicker
-              defaultValue={moment('00:00', format)}
-              format={format}
-            />
+          <Form.Item label="Reason:" name="reason">
+            <Input.TextArea />
           </Form.Item>
-          <Form.Item
-            label="Special reason"
-            name="special-reason"
-            rules={[{ required: true, message: 'Can not empty' }]}
-          >
-            <Checkbox>Input error</Checkbox>;
-          </Form.Item>
+          <div className="button">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </div>
         </Form>
       </Modal>
     </div>

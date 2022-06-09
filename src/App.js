@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
+import Favicon from 'react-favicon'
 import { Outlet, useNavigate } from 'react-router-dom'
-import Header from './layout/Header/Header'
+import logo from '../src/layout/header/logo.png'
+import Header from './layout/header/Header'
 import './styles/index.scss'
 import getLocalStorageItem from './utils/helpers/handleLocalStorageItems/getLocalStorageItem'
+
 function App() {
   const navigate = useNavigate()
   const accessToken = getLocalStorageItem('accessToken')
@@ -15,6 +18,7 @@ function App() {
 
   return (
     <div className="App">
+      <Favicon url={logo} />
       <Header />
       <Outlet />
     </div>
