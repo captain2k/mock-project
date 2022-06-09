@@ -5,7 +5,6 @@ $font-size-link: 16px;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,6 +77,13 @@ $font-size-link: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
+      .user-name {
+        text-align: right;
+        max-width: 145px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       .user-avatar .avatar {
         width: 38px;
         height: 38px;
@@ -89,25 +95,18 @@ $font-size-link: 16px;
       &:active {
         background-color: whitesmoke;
       }
-      .down-arrow {
-        font-size: 20px;
-        transition: ease 300ms;
-        &:hover {
-          color: rgb(94, 94, 94);
-        }
-      }
     }
 
     .navbar-right-item {
       position: relative;
       .sub-menu {
-        // z-index: -10;
+        z-index: 100;
         opacity: 1;
         transform: translateY(0);
         position: absolute;
         transition: ease 200ms;
         right: 0;
-        bottom: -100px;
+        bottom: -95px;
         min-width: 180px;
         background-color: white;
         color: rgb(58, 58, 58);
@@ -129,6 +128,15 @@ $font-size-link: 16px;
         transform: translateY(-200px);
       }
     }
+  }
+  .header-mask {
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
   }
 }
 
@@ -157,7 +165,7 @@ $font-size-link: 16px;
         .wrap-link {
           padding: 10px 10px;
           .link {
-            font-size: 15px;
+            font-size: 13px;
             min-width: 55px;
             text-align: center;
           }
@@ -168,12 +176,18 @@ $font-size-link: 16px;
     // CSS for nav bar right
     .navbar-right {
       .user-function {
+        .user-name {
+          max-width: 100px;
+          font-size: 13px;
+        }
         .user-avatar .avatar {
           margin: 0 5px;
         }
-        .down-arrow {
-          font-size: 18px;
-        }
+      }
+      .sub-menu {
+        bottom: -92px !important;
+        min-width: 155px !important;
+        font-size: 13px;
       }
     }
   }

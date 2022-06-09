@@ -1,5 +1,6 @@
 @import "../../../styles/color";
-.register-forget {
+
+.register-forget-form {
   .ant-input {
     margin: 0;
     padding: 0;
@@ -10,5 +11,14 @@
     button {
       background-color: $bgPrimary;
     }
+  }
+  .enableFocus {
+    box-shadow: none !important;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .ant-modal {
+    width: 80% !important;
   }
 }

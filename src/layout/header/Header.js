@@ -1,25 +1,21 @@
-import {
-  CaretDownOutlined,
-  FormOutlined,
-  LogoutOutlined,
-} from '@ant-design/icons'
+import { FormOutlined, LogoutOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link, NavLink } from 'react-router-dom'
 import { saveUserProfile } from '../../store/reducer/userProfileSlice'
 import useAxiosPrivate from '../../utils/requests/useAxiosPrivate'
-import avatar from './avatar.png'
 import ChangePassPopup from './ChangePassPopup/ChangePassPopup'
+import defaultAvatar from './defaultAvatar.png'
 import './Header.scss'
 import logo from './logo.png'
 const Header = () => {
   const [showSubMenu, setShowSubMenu] = useState(false)
   const [toggleModal, setToggleModal] = useState(false)
+  const userProfile = useSelector((state) => state.userProfileSlice)
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const dispatch = useDispatch()
-  console.log(useSelector((state) => state.userProfileSlice))
   useEffect(() => {
     async function getProfileUser() {
       const res = await axiosPrivate.get('/member/profile')
@@ -74,11 +70,17 @@ const Header = () => {
             className="user-function"
             onClick={() => setShowSubMenu(!showSubMenu)}
           >
+            <div className="user-name">{userProfile.full_name}</div>
             <div className="user-avatar">
-              <img className="avatar" alt="avatar" src={avatar}></img>
-            </div>
-            <div className="down-arrow">
-              <CaretDownOutlined />
+              {userProfile.avatar ? (
+                <img
+                  className="avatar"
+                  alt="avatar"
+                  src={userProfile.avatar}
+                ></img>
+              ) : (
+                <img className="avatar" alt="avatar" src={defaultAvatar}></img>
+              )}
             </div>
           </div>
           <div className={showSubMenu ? 'sub-menu show' : 'sub-menu hide'}>
@@ -99,6 +101,12 @@ const Header = () => {
         setToggleModal={setToggleModal}
         toggleModal={toggleModal}
       />
+      {showSubMenu && (
+        <div
+          className="header-mask"
+          onClick={() => setShowSubMenu(false)}
+        ></div>
+      )}
     </div>
   )
 }

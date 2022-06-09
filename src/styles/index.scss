@@ -1,13 +1,33 @@
-@import 'reset';
-@import 'color';
+@import "reset";
+@import "color";
 
 @font-face {
   font-family: Montserrat;
   src: url(./FontMontserrat/Montserrat-Medium.otf);
 }
+// đè class ant design
+::selection {
+  background-color: $bgPrimary;
+}
+.ant-picker-focused {
+  box-shadow: 0 0 0 1px rgba($color: $bgPrimary, $alpha: 0.5);
+}
+.ant-input:hover {
+  border-color: $bgPrimary;
+}
+.ant-input:focus {
+  box-shadow: 0 0 0 1px rgba($color: $bgPrimary, $alpha: 0.5);
+}
 
+.ant-checkbox-wrapper:hover .ant-checkbox-inner {
+  border-color: $bgPrimary;
+}
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: $bgPrimary;
+  border-color: $bgPrimary !important;
+}
 body {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 
   //Button
   .primary-button {
@@ -105,8 +125,7 @@ body {
     }
   }
 
-  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
-    .ant-select-selector {
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-color: $bgPrimary;
     box-shadow: 0 0 0 2px $blurPrimaryInput;
   }

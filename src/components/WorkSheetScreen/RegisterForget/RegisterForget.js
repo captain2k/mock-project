@@ -1,9 +1,9 @@
 import { Button, Checkbox, Form, Input, Modal, TimePicker } from 'antd'
 import moment from 'moment'
 import { useState } from 'react'
-import MESSAGE_REQUIRED from '../../../common/message'
+import { MESSAGE_REQUIRED } from '../../../common/message'
 import './RegisterForget.scss'
-function RegisterForget() {
+const RegisterForget = () => {
   const [isModalVisible, setIsModalVisible] = useState(true)
   const registrationDate = moment(new Date()).format('DD-MM-YYYY HH:mm')
   const registerForDate = moment(new Date()).format('DD-MM-YYYY')
@@ -24,7 +24,7 @@ function RegisterForget() {
     console.log('Failed:', errorInfo)
   }
   return (
-    <div>
+    <div className="register-forget">
       <Modal
         width={'60%'}
         title="Register Forget Check-in/Check-out"
@@ -34,7 +34,7 @@ function RegisterForget() {
         footer={false}
       >
         <Form
-          className="register-forget"
+          className="register-forget-form"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           initialValues={{
@@ -47,10 +47,10 @@ function RegisterForget() {
           labelAlign={'left'}
         >
           <Form.Item label="Registration date:" name="registration_date">
-            <Input bordered={false} readOnly />
+            <Input bordered={false} readOnly className="enableFocus" />
           </Form.Item>
           <Form.Item label="Register for date:" name="register_for_date">
-            <Input bordered={false} readOnly />
+            <Input bordered={false} readOnly className="enableFocus" />
           </Form.Item>
           <Form.Item
             label="Checkin:"
