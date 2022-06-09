@@ -1,0 +1,81 @@
+@import '../../styles/color';
+
+.worksheet {
+    margin-top: 57px;
+    padding: 32px;
+    
+    fieldset{
+        border: 1px solid #000;
+    }
+    legend{
+        width: fit-content;
+    }
+
+    .worksheet-filter-form {
+        padding: 4px 16px 0px 16px
+    }
+
+    .worksheet-filter-wrap{
+        display: flex;
+        justify-content: space-between;
+    }
+    .worksheet-filter-left{
+        display: flex;
+        align-items: center;
+    }
+
+    .worksheet-filter-left-by-day{
+        display: flex;
+        align-items: baseline;
+    }
+
+    .worksheet-filter-right {
+        label {
+            margin-right: 12px;
+        }
+    }
+
+    .worksheet-per-page {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        h3{
+            margin: 0;
+        }
+
+        label{
+            margin-right: 16px;
+        }
+    }
+
+    .worksheet-filter-button {
+        text-align: center;
+    }
+
+    // Table
+    .worksheet-table {
+        .ant-table-cell {
+            text-align: center;
+
+        }
+    }
+
+    .worksheet-pagination {
+        margin-top: 24px;
+        text-align: center;
+    }
+}
+
+.even {
+    background-color: #f0f0f0;
+}
+.flex {
+    display: flex;
+    align-items: center;
+    span {
+        text-decoration: underline;
+        color: blue;
+        cursor: pointer;
+    }
+}

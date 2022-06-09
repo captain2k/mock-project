@@ -89,12 +89,12 @@ const Profile = () => {
 
   return (
     <>
-      <Button style={{ marginTop: 60 }} onClick={() => setIsShow(!isShow)}>
+      {/* <Button style={{ marginTop: 60 }} onClick={() => setIsShow(!isShow)}>
         Open modal
-      </Button>
+      </Button> */}
       <Modal
         className="edit-profile-pop-up"
-        visible={isShow}
+        visible
         title="My profile"
         footer={null}
         closeIcon={<XIcon />}
