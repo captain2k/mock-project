@@ -62,8 +62,49 @@
     }
 
     .worksheet-pagination {
+        display: flex;
         margin-top: 24px;
-        text-align: center;
+       .worksheet-pagination-wrap {
+            display: flex;
+            margin: auto;
+            align-items: center;
+            .ant-pagination-options {
+                display: none;
+            }
+            .ant-pagination-item-active {
+                border-color: $bgPrimary;
+                 a {
+                     color: $bgPrimary;
+             }
+            }
+            .ant-pagination-item {
+                &:hover {
+                  border-color: $bgPrimary;
+                  a {
+                    color: $bgPrimary;
+                  }
+                }
+              }
+            //   ?????
+            li[title='Previous Page'] {
+                &:hover {
+                    border-color: $bgPrimary;
+                    a{
+                        color: #000;
+                    }
+                }
+            }
+            .ant-pagination {
+                .ant-pagination-jump-prev ,.ant-pagination-jump-next{
+                    &:hover .ant-pagination-item-link {
+                        display: block;
+                    }
+                }
+            }
+        }
+        // .ant-pagination-item-link {
+        //     display: inline-block;
+        // }
     }
 }
 
@@ -79,3 +120,23 @@
         cursor: pointer;
     }
 }
+
+.color-red-late {
+    .ant-table-cell:nth-child(5) {
+        color: red;
+    }
+}
+.color-red-early {
+    .ant-table-cell:nth-child(6) {
+        color: red;
+    }
+}
+
+.mr-12 {
+    margin-right: 12px;
+}
+
+.ml-12 {
+    margin-left: 12px;
+}
+

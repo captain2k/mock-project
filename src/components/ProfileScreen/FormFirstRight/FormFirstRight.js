@@ -1,8 +1,8 @@
 import { AutoComplete, Form, Input, Select } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { MESSAGE_REQUIRED } from '../../../common/message'
 import { API_BANK_LIST } from '../../../services/apiBankList'
+import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 
 const { Option } = Select
 

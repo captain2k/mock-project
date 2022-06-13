@@ -1,8 +1,8 @@
 import { Button, Form, message, Modal } from 'antd'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
-import { convertTimeToIso } from '../../common/convertTime'
+import { useEffect, useState } from 'react'
 import XIcon from '../../common/XIcon/XIcon'
+import { convertTimeToIso } from '../../utils/helpers/convertTime'
 import useAxiosPrivate from '../../utils/requests/useAxiosPrivate'
 import FormFirstLeft from './FormFirstLeft/FormFirstLeft'
 import FormFirstRight from './FormFirstRight/FormFirstRight'
@@ -20,19 +20,18 @@ const Profile = () => {
   const [form] = Form.useForm()
 
   useEffect(() => {
+    const getUserProfile = async () => {
+      const res = await axiosPrivate.get(`/member/profile`)
+      if (res) {
+        setUserProfile(res.data.member)
+      }
+    }
     getUserProfile()
   }, [axiosPrivate, isShow])
 
   useEffect(() => {
     document.title = 'Edit Profile'
   }, [])
-
-  const getUserProfile = async () => {
-    const res = await axiosPrivate.get(`/member/profile`)
-    if (res) {
-      setUserProfile(res.data.member)
-    }
-  }
 
   const handleSubmit = async (values) => {
     const birth_date = moment(values['birth_date']).format('YYYY-MM-DD')
@@ -63,12 +62,13 @@ const Profile = () => {
     return Modal.confirm({
       title: 'Do you really want to cancel updating?',
       content: 'Everything will be not saved!',
+      centered: true,
       onOk: () => {
-        setIsShow(false)
+        // setIsShow(false)
         form.resetFields()
       },
       onCancel: () => {
-        setIsShow(true)
+        // setIsShow(true)
       },
     })
   }
@@ -77,21 +77,19 @@ const Profile = () => {
     return Modal.confirm({
       title: 'Do you really want to close this form?',
       content: 'Everything will be not saved!',
+      centered: true,
       onOk: () => {
-        setIsShow(false)
+        // setIsShow(false)
         form.resetFields()
       },
       onCancel: () => {
-        setIsShow(true)
+        // setIsShow(true)
       },
     })
   }
 
   return (
     <>
-      {/* <Button style={{ marginTop: 60 }} onClick={() => setIsShow(!isShow)}>
-        Open modal
-      </Button> */}
       <Modal
         className="edit-profile-pop-up"
         visible

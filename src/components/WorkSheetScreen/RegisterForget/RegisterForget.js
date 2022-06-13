@@ -1,7 +1,7 @@
 import { Button, Checkbox, Form, Input, Modal, TimePicker } from 'antd'
 import moment from 'moment'
 import { useState } from 'react'
-import { MESSAGE_REQUIRED } from '../../../common/message'
+import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 import './RegisterForget.scss'
 const RegisterForget = () => {
   const [isModalVisible, setIsModalVisible] = useState(true)

@@ -7,3 +7,11 @@ export const convertTimeToIso = (stringTime) => {
 export const convertMomentToString = (objMoment) => {
   return moment(objMoment).format('YYYY-MM-DD')
 }
+
+export const convertDayToShortDay = (day) => {
+  return moment(day).format('DD/MM/YYYY|ddd')
+}
+
+export const convertDateTimeToTime = (dateTime) => {
+  return moment(dateTime).format('HH:mm')
+}

@@ -1,6 +1,6 @@
 import { Form, Input } from 'antd'
 import React from 'react'
-import { MESSAGE_REQUIRED } from '../../../common/message'
+import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 function FormSecond() {
   return (
     <Form.Item>

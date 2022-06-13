@@ -12,7 +12,6 @@ export const changePass = createAsyncThunk(
         new_password: args.newPassword,
         new_password_confirmation: args.confirmPassword,
       })
-      console.log('res', res)
       return res.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data)
