@@ -1,6 +1,4 @@
 import { DatePicker, Form, Input, Select } from 'antd'
-import React from 'react'
-// import { MESSAGE_REQUIRED } from '../../../common/message'
 import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 
 const { Option } = Select
