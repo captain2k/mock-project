@@ -3,13 +3,6 @@ import React, { useState } from 'react'
 
 function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
   const [src, setSrc] = useState('')
-  const normFile = (e) => {
-    console.log('Upload event:', e)
-    if (Array.isArray(e)) {
-      return e
-    }
-    return e && e.fileList
-  }
 
   const props = {
     beforeUpload: (file) => {

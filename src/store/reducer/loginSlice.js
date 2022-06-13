@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import setLocalStorageItems from '../../utils/helpers/handleLocalStorageItems/setLocalStorageItems'
+import { setLocalStorageItems } from '../../utils/helpers/handleLocalStorageItems/index'
 
 export const login = createAsyncThunk(
   'login/postUserAccount',

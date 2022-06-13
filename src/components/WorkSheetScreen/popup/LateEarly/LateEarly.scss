@@ -1,0 +1,128 @@
+@import '../../../../styles/color';
+
+.container {
+  margin: 0 6px;
+
+  .item {
+    margin-bottom: 10px;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .flex-1 {
+    flex: 1;
+  }
+
+  .w-140 {
+    width: 140px;
+  }
+
+  .mr-20 {
+    margin-right: 20px;
+  }
+
+  .col-order-2 {
+    width: 140px;
+  }
+
+  .ant-form-item-label {
+    width: 140px;
+    margin-right: 20px;
+    flex: 0 1 auto;
+    max-width: 100%;
+    display: flex;
+  }
+  .ant-form-item {
+    margin: 0 0 8px;
+    width: 100%;
+
+    .ant-col {
+      margin-left: 0;
+
+      .ant-form-item-control-input-content {
+        display: flex;
+        // justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  }
+  .ant-form-item-control {
+    max-width: 100%;
+  }
+
+  .button-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .date-picker {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.check_time {
+  display: flex;
+  width: 50%;
+}
+
+.late_time,
+.early_time {
+  display: flex;
+  width: 50%;
+
+  .time {
+    color: $bgDanger;
+  }
+}
+
+.reason {
+  display: flex;
+}
+
+@media (min-width: 992px) {
+  .modal_late_early {
+    .col-order-2 {
+      width: 80px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .reason {
+    display: block;
+  }
+
+  .ant-modal-body {
+    padding: 12px 24px 12px;
+  }
+}
+
+@media (min-width: 576px) {
+  .overtime_time-request {
+    display: flex;
+
+    .overtime {
+      border-right: 2px solid #000;
+      padding-right: 8px;
+      margin-right: 8px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .overtime_time-request {
+    display: block;
+
+    .overtime {
+      border-right: none;
+    }
+  }
+
+  .item {
+    margin-bottom: 8px;
+  }
+}

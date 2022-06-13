@@ -1,10 +1,10 @@
-import getToken from '../helpers/handleLocalStorageItems/getLocalStorageItem'
+import { getLocalStorageItem } from '../helpers/handleLocalStorageItems/index'
 import axiosInstance from './axiosInstance'
 
 const useAxiosPrivate = () => {
   axiosInstance.interceptors.request.use(
     (configs) => {
-      const accessToken = getToken('accessToken')
+      const accessToken = getLocalStorageItem('accessToken')
       if (accessToken) {
         configs.headers['Authorization'] = `Bearer ${accessToken}`
       }

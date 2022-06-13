@@ -7,7 +7,7 @@ export const changePass = createAsyncThunk(
   async (args, thunkAPI) => {
     try {
       const axiosPrivate = useAxiosPrivate()
-      const res = await axiosPrivate.post('/auth/change-pass?_method=put', {
+      const res = await axiosPrivate.put('/auth/change-pass', {
         old_password: args.oldPassword,
         new_password: args.newPassword,
         new_password_confirmation: args.confirmPassword,

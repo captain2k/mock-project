@@ -7,7 +7,7 @@ import {
   getLoginLoading,
   login,
 } from '../../store/reducer/loginSlice'
-import getLocalStorageItem from '../../utils/helpers/handleLocalStorageItems/getLocalStorageItem'
+import { getLocalStorageItem } from '../../utils/helpers/handleLocalStorageItems/index'
 import LoginImage from './LoginImage.png'
 import './LoginScreen.scss'
 

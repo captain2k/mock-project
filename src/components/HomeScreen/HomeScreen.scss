@@ -1,0 +1,123 @@
+@import '../../styles/color';
+
+.home-screen {
+  background-color: $bgLogin;
+  padding-left: 64px;
+  padding-right: 64px;
+  padding-bottom: 32px;
+  border-radius: 5px;
+  .container-home-screen {
+    height: 100%;
+    padding-top: 32px;
+    background-color: $bgLogin;
+    .header-home-screen {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 5px 5px 0 0;
+      height: 10%;
+      h3 {
+        font-size: 18px;
+        margin: 0;
+        padding-left: 12px;
+      }
+    }
+    .body-home-screen {
+      height: 90%;
+      .ant-table {
+        border-radius: 5px;
+        border: 1px black solid;
+        .oddRow {
+          background-color: $bgLogin;
+          &:hover {
+            background-color: $bgLogin;
+          }
+        }
+      }
+      .ant-table-thead {
+        th {
+          background-color: #f3f2f7;
+        }
+      }
+      .custom-pagination {
+        margin-bottom: 0;
+        .ant-pagination-item-active {
+          border-color: $bgPrimary;
+          a {
+            color: $bgPrimary;
+          }
+        }
+        .ant-pagination-item {
+          margin-right: 0;
+          &:hover {
+            border-color: $bgPrimary;
+            a {
+              color: $bgPrimary;
+            }
+          }
+        }
+        .ant-pagination-prev {
+          margin-right: 0;
+          &:hover {
+            button {
+              border-color: #ccc;
+              a {
+                color: black;
+              }
+            }
+          }
+          .ant-btn {
+            &:hover {
+              border-color: $bgPrimary;
+              color: $bgPrimary;
+            }
+          }
+        }
+        .ant-pagination-next {
+          &:hover {
+            button {
+              border-color: #ccc;
+              a {
+                color: black;
+              }
+            }
+          }
+          .ant-btn {
+            &:hover {
+              border-color: $bgPrimary;
+              color: $bgPrimary;
+            }
+          }
+        }
+        .ant-pagination-jump-next {
+          &:hover {
+            .ant-pagination-item-link-icon {
+              color: $bgPrimary;
+            }
+          }
+        }
+        .ant-pagination-jump-prev {
+          &:hover {
+            .ant-pagination-item-link-icon {
+              color: $bgPrimary;
+            }
+          }
+        }
+        .ant-pagination-options {
+          flex: 1;
+          display: flex;
+          justify-content: flex-end;
+          &::before {
+            content: 'Items per page';
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+          }
+        }
+        .ant-pagination-total-text {
+          flex: 1;
+        }
+      }
+    }
+  }
+}

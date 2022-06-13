@@ -1,5 +1,5 @@
 import { FormOutlined, LogoutOutlined } from '@ant-design/icons'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link, NavLink } from 'react-router-dom'
@@ -25,7 +25,7 @@ const Header = () => {
       }
     }
     getProfileUser()
-  }, [])
+  }, [axiosPrivate, dispatch])
   const handleLogOut = async () => {
     const res = await axiosPrivate.delete('/auth/logout')
     if (res.status === 200) {
@@ -35,13 +35,12 @@ const Header = () => {
   }
 
   const handleClickChangePass = () => {
-    alert('clicked')
     setShowSubMenu(false)
     setToggleModal(true)
   }
 
   return (
-    <div className="navbar">
+    <div className="navbar" id="header">
       <div className="navbar-left">
         <Link className="logo-link" to="/edit-profile">
           <div className="logo">

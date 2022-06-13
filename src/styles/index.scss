@@ -83,6 +83,12 @@ body {
     }
   }
 
+  // date datePicker
+  .ant-picker-focused {
+    border-color: $bgPrimary;
+    box-shadow: 0 0 0 2px $blurPrimaryInput;
+  }
+
   //Input
   .input-primary {
     &:hover {
@@ -99,6 +105,19 @@ body {
       span {
         color: $bgPrimary;
       }
+    }
+  }
+
+  .ant-input {
+    &:hover {
+      border-color: $bgPrimary;
+      box-shadow: 0 0 0 2px $blurPrimaryInput;
+    }
+    &:focus {
+      border-color: $bgPrimary;
+      box-shadow: 0 0 0 2px $blurPrimaryInput;
+      border-right-width: 1px;
+      outline: 0;
     }
   }
 

@@ -1,4 +1,4 @@
-@import "../../styles/color";
+@import '../../styles/color';
 $font-size-link: 16px;
 .navbar {
   position: fixed;
@@ -20,6 +20,7 @@ $font-size-link: 16px;
 
   // CSS for nav bar left
   .navbar-left {
+    margin-left: 1%;
     display: flex;
     align-items: center;
     margin-left: 1%;
