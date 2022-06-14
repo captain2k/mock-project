@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import getLocalStorageItem from '../../utils/helpers/handleLocalStorageItems/getLocalStorageItem'
+import { handleWorksheetTableData } from '../../utils/helpers/handleTableData'
 
 export const getWorksheet = createAsyncThunk(
   'getWorksheet',
@@ -31,7 +32,8 @@ const worksheetSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getWorksheet.fulfilled]: (state, action) => {
-      state.worksheet = action.payload.worksheet.data
+      const result = handleWorksheetTableData(action.payload.worksheet.data)
+      state.worksheet = result
       state.isLoading = false
     },
     [getWorksheet.pending]: (state, action) => {

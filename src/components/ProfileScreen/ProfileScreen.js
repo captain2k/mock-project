@@ -41,6 +41,12 @@ const Profile = () => {
     const passport_expiration = moment(values['passport_expiration']).format(
       'YYYY-MM-DD',
     )
+
+    // let uploadTask = storage
+    //   .ref('images')
+    //   .child(`${values['avatar_official'][0].name}`)
+    //   .put(values['avatar_official'][0].name)
+
     const updatedData = {
       ...values,
       birth_date,
@@ -56,6 +62,7 @@ const Profile = () => {
 
   const handleError = (err) => {
     console.log(err)
+    message.error('Update profile unsuccessfully!')
   }
 
   const handleShowDialog = () => {
@@ -148,6 +155,8 @@ const Profile = () => {
               memberCode={profileUser.member_code}
               fullName={profileUser.full_name}
               phoneNumber={profileUser.phone}
+              avatar_official={profileUser.avatar_official}
+              avatar={profileUser.avatar}
             />
             <div className="user-info-form-first">
               {/* Left */}

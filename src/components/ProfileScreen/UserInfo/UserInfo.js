@@ -1,8 +1,22 @@
 import { Avatar, Button, Form, message, Tooltip, Upload } from 'antd'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
+function UserInfo({
+  mail,
+  memberCode,
+  phoneNumber,
+  fullName,
+  avatar_official,
+  avatar,
+}) {
   const [src, setSrc] = useState('')
+  const normFile = (e) => {
+    console.log('Upload event:', e)
+    if (Array.isArray(e)) {
+      return e
+    }
+    return e && e.fileList
+  }
 
   const props = {
     beforeUpload: (file) => {
@@ -35,28 +49,36 @@ function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
       <div className="user-info">
         <div className="user-info-avatar">
           <div className="user-info-avatar-official">
-            {/* <Form.Item
+            <Avatar
+              shape="square"
+              size={100}
+              src={src ? src : avatar_official}
+            />
+            <Form.Item
               name="avatar_official"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-            > */}
-            <Avatar shape="square" size={100} src={src ? src : null} />
-            {/* </Form.Item> */}
-            <Upload {...props}>
-              <Button size="small" className="primary-button">
-                Upload avatar
-              </Button>
-            </Upload>
+            >
+              <Upload {...props}>
+                <Button size="small" className="primary-button">
+                  Upload avatar
+                </Button>
+              </Upload>
+            </Form.Item>
           </div>
           <div className="user-info-sub-avatar">
-            {/* <Form.Item name="avatar"> */}
-            <Avatar shape="square" size={60} src={src ? src : null} />
-            {/* </Form.Item> */}
-            <Upload {...props}>
-              <Button size="small" className="outline-primary-button">
-                Upload
-              </Button>
-            </Upload>
+            <Avatar shape="square" size={60} src={src ? src : avatar} />
+            <Form.Item
+              name="avatar"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <Upload {...props}>
+                <Button size="small" className="outline-primary-button">
+                  Upload
+                </Button>
+              </Upload>
+            </Form.Item>
           </div>
         </div>
         <div className="user-info-detail">

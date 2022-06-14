@@ -9,7 +9,7 @@ export const convertMomentToString = (objMoment) => {
 }
 
 export const convertDayToShortDay = (day) => {
-  return moment(day).format('DD/MM/YYYY|ddd')
+  return moment(day).format('DD/MM/YYYY ddd')
 }
 
 export const convertDateTimeToTime = (dateTime) => {
