@@ -7,7 +7,6 @@ import {
   getWorksheetLoading,
 } from '../../../store/reducer/worksheetSlice'
 import { convertMomentToString } from '../../../utils/helpers/convertTime'
-import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 
 const { Option } = Select
 
@@ -121,12 +120,12 @@ const WorkSheetFilter = ({ page, perPage }) => {
                   <div className="worksheet-filter-left-by-day">
                     <Form.Item
                       name="start_date"
-                      rules={[
-                        {
-                          required: true,
-                          message: MESSAGE_REQUIRED,
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: MESSAGE_REQUIRED,
+                      //   },
+                      // ]}
                     >
                       <DatePicker
                         placeholder="DD/MM/YYYY"
@@ -137,12 +136,12 @@ const WorkSheetFilter = ({ page, perPage }) => {
                     <span style={{ marginLeft: 20, marginRight: 20 }}>to</span>
                     <Form.Item
                       name="end_start"
-                      rules={[
-                        {
-                          required: true,
-                          message: MESSAGE_REQUIRED,
-                        },
-                      ]}
+                      // rules={[
+                      // {
+                      //   required: true,
+                      //     message: MESSAGE_REQUIRED,
+                      //   },
+                      // ]}
                     >
                       <DatePicker
                         placeholder="DD/MM/YYYY"

@@ -13,6 +13,7 @@ import {
   getNotice,
   getNoticeDetail,
   getNoticeState,
+  viewAttachment,
 } from '../../store/reducer/homeSlice'
 import calculateComponentHeight from '../../utils/helpers/handleSize/calculateComponentHeight'
 import './HomeScreen.scss'
@@ -47,6 +48,10 @@ const HomeScreen = () => {
     dispatch(getNoticeDetail({ noticeId: rowId, toDepartment, publishedDate }))
   }
 
+  const handleViewAttachment = (fileName) => {
+    dispatch(viewAttachment({ fileName }))
+  }
+
   useEffect(() => {
     // Calculate home screen height
     const headerHeight = calculateComponentHeight('.navbar')
@@ -73,10 +78,26 @@ const HomeScreen = () => {
   // Recalculate home screen height when resize
   useEffect(() => {
     const handleResize = () => {
+      // Calculate home screen height
       const headerHeight = calculateComponentHeight('.navbar')
       const windowHeight = window.innerHeight
       homeScreen.current.style.paddingTop = headerHeight + 'px'
       homeScreen.current.style.height = windowHeight + 'px'
+      // Calculate table scroll height
+      const PAGINATION_MARGIN_TOP = 16
+      const HOME_SCREEN_PADDING_BOTTOM = 32
+      const customPaginationHeight = 32
+      const tableTileHeight = calculateComponentHeight('.header-home-screen')
+      const tableHeaderHeight = calculateComponentHeight('.ant-table-header')
+      const calculateHeight =
+        windowHeight -
+        headerHeight -
+        tableTileHeight -
+        tableHeaderHeight -
+        customPaginationHeight -
+        2 * HOME_SCREEN_PADDING_BOTTOM -
+        PAGINATION_MARGIN_TOP
+      setTableScrollHeight(calculateHeight)
     }
     window.addEventListener('resize', handleResize)
     return () => window.addEventListener('resize', handleResize)
@@ -102,29 +123,37 @@ const HomeScreen = () => {
       title: 'NO',
       dataIndex: 'no',
       key: 'no',
+      width: '5%',
+      ellipsis: true,
     },
     {
       title: 'SUBJECT',
       dataIndex: 'subject',
       key: 'subject',
+      width: '20%',
+      ellipsis: true,
     },
     {
       title: 'AUTHOR',
       dataIndex: 'author',
       key: 'author',
       align: 'center',
+      width: '15%',
+      ellipsis: true,
     },
     {
       title: 'TO DEPARTMENT',
       dataIndex: 'toDepartment',
       key: 'toDepartment',
       align: 'center',
+      width: '15%',
     },
     {
       title: 'PUBLISHED DATE',
       dataIndex: 'publishedDate',
       key: 'publishedDate',
       align: 'center',
+      width: '15%',
       showSorterTooltip: false,
       sorter: () => {
         if (oderPublishedDate === 'desc') {
@@ -138,13 +167,20 @@ const HomeScreen = () => {
       title: 'ATTACHMENT',
       dataIndex: 'attachment',
       key: 'attachment',
-      render: (text) => <Link to="./">{text}</Link>,
+      width: '20%',
+      ellipsis: true,
+      render: (text) => (
+        <Link to="#" onClick={() => handleViewAttachment(text)}>
+          {text}
+        </Link>
+      ),
     },
     {
       title: 'DETAIL',
       dataIndex: 'detail',
       key: 'detail',
       align: 'center',
+      width: '10%',
       render: ({ content, rowId, toDepartment, publishedDate }) => (
         <Link
           to="./"
@@ -168,6 +204,7 @@ const HomeScreen = () => {
           <Table
             dataSource={[...dataSource]}
             columns={columns}
+            bordered
             rowClassName={(record, index) => {
               if (index % 2 === 0) {
                 return 'evenRow'
@@ -181,6 +218,7 @@ const HomeScreen = () => {
             pagination={{
               position: ['bottomCenter'],
               showTotal: (total) => `Total number of records: ${total}`,
+              locale: { items_per_page: '' },
               hideOnSinglePage: true,
               current: currentPage,
               pageSize: pageSize,

@@ -1,4 +1,5 @@
 import {
+  DownloadOutlined,
   MailTwoTone,
   PhoneTwoTone,
   RightCircleTwoTone,
@@ -6,14 +7,22 @@ import {
 } from '@ant-design/icons'
 import { Col, Modal, Row } from 'antd'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import XIcon from '../../../common/XIcon/XIcon'
-import { getNoticeDetailState } from '../../../store/reducer/homeSlice'
+import {
+  downloadAttachment,
+  getNoticeDetailState,
+} from '../../../store/reducer/homeSlice'
 import './NoticeDetail.scss'
 
 const NoticeDetail = ({ toggleModal, setToggleModal }) => {
+  const dispatch = useDispatch()
   const handleCancel = () => {
     setToggleModal(false)
+  }
+  const handleDownload = () => {
+    dispatch(downloadAttachment({ fileName: notice_detail?.attachment }))
   }
   const noticeDetail = useSelector(getNoticeDetailState)
   const { detail, toDepartment, publishedDate } = noticeDetail
@@ -71,7 +80,13 @@ const NoticeDetail = ({ toggleModal, setToggleModal }) => {
       <p>
         <strong>Subject:</strong> {notice_detail?.subject}
       </p>
-      <p>Attachment: {notice_detail?.attachment}</p>
+      <p>
+        Attachment:
+        <Link to="#" download target="_self" onClick={handleDownload}>
+          {' '}
+          {notice_detail?.attachment} <DownloadOutlined />
+        </Link>
+      </p>
       <p>Message: {notice_detail?.message}</p>
     </Modal>
   )

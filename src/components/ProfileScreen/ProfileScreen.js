@@ -13,9 +13,8 @@ import FormThirdRight from './FormThirdRight/FormThirdRight'
 import './profile.scss'
 import UserInfo from './UserInfo/UserInfo'
 
-const Profile = () => {
+const Profile = ({ showProFileScreen, handleHideProfileScreen }) => {
   const [profileUser, setUserProfile] = useState({})
-  const [isShow, setIsShow] = useState(false)
 
   const axiosPrivate = useAxiosPrivate()
   const [form] = Form.useForm()
@@ -28,7 +27,7 @@ const Profile = () => {
       }
     }
     getUserProfile()
-  }, [axiosPrivate, isShow])
+  }, [axiosPrivate, showProFileScreen])
 
   useEffect(() => {
     document.title = 'Edit Profile'
@@ -77,11 +76,8 @@ const Profile = () => {
       content: 'Everything will be not saved!',
       centered: true,
       onOk: () => {
-        // setIsShow(false)
         form.resetFields()
-      },
-      onCancel: () => {
-        // setIsShow(true)
+        handleHideProfileScreen()
       },
     })
   }
@@ -92,11 +88,8 @@ const Profile = () => {
       content: 'Everything will be not saved!',
       centered: true,
       onOk: () => {
-        // setIsShow(false)
+        handleHideProfileScreen()
         form.resetFields()
-      },
-      onCancel: () => {
-        // setIsShow(true)
       },
     })
   }
@@ -105,12 +98,12 @@ const Profile = () => {
     <>
       <Modal
         className="edit-profile-pop-up"
-        visible
+        visible={showProFileScreen}
         title="My profile"
         footer={null}
         closeIcon={<XIcon />}
         onCancel={handleCancel}
-        onOk={() => setIsShow(false)}
+        onOk={() => handleHideProfileScreen()}
       >
         <div className="user-info-form">
           <Form

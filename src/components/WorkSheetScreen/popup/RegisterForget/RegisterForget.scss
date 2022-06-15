@@ -1,0 +1,44 @@
+@import "../../../../styles/color";
+
+.register-forget-form {
+  .ant-input {
+    margin: 0;
+    padding: 0;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    border: none;
+
+    button {
+      display: block;
+    }
+    button.register-button,
+    button.update-button {
+      background-color: $bgPrimary;
+    }
+
+    .register-button.hide {
+      display: none;
+    }
+
+    button.cancel {
+      margin-left: 20px;
+    }
+  }
+  .enableFocus {
+    box-shadow: none !important;
+  }
+
+  .checkin,
+  .checkout {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .ant-modal {
+    width: 80% !important;
+  }
+}

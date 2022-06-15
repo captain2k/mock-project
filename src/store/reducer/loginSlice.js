@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setLocalStorageItems } from '../../utils/helpers/handleLocalStorageItems/index'
-
 export const login = createAsyncThunk(
   'login/postUserAccount',
   async (args, thunkAPI) => {
@@ -13,6 +12,11 @@ export const login = createAsyncThunk(
           password: args.password,
         },
       )
+      const fullName = res.data.member.full_name
+      const avatar = res.data.member.avatar
+      localStorage.setItem('full_name', fullName)
+      localStorage.setItem('avatar', avatar)
+
       return res.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data)

@@ -1,4 +1,4 @@
-@import '../../styles/color';
+@import "../../styles/color";
 
 .worksheet {
   margin-top: 57px;
@@ -85,7 +85,7 @@
         }
       }
       //   ?????
-      li[title='Previous Page'] {
+      li[title="Previous Page"] {
         &:hover {
           border-color: $bgPrimary;
           a {
@@ -122,7 +122,15 @@
 }
 
 .color-red {
-    color: red;
+  color: red;
+}
+
+.bg-color-yeloww {
+  background-color: rgba(162, 202, 28, 0.727);
+}
+
+.bg-color-yeloww {
+  background-color: rgba(162, 202, 28, 0.727);
 }
 
 .bg-color-yeloww {

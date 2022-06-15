@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { getLocalStorageItem } from '../../utils/helpers/handleLocalStorageItems'
 import { handleHomeTableData } from '../../utils/helpers/handleTableData/index'
 import useAxiosPrivate from '../../utils/requests/useAxiosPrivate'
 
@@ -22,6 +24,60 @@ export const getNoticeDetail = createAsyncThunk(
   },
 )
 
+export const downloadAttachment = createAsyncThunk(
+  'noticeSlice/downloadAttachment',
+  async (args) => {
+    const fileName = args.fileName
+    const accessToken = getLocalStorageItem('accessToken')
+    const res = await axios
+      .get(
+        process.env.REACT_APP_BASE_URL + `/notifications/download/${fileName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'blob',
+        },
+      )
+      .then((response) => {
+        const file = new Blob([response.data])
+        const url = window.URL.createObjectURL(file)
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+      })
+    return res.data
+  },
+)
+
+export const viewAttachment = createAsyncThunk(
+  'noticeSlice/viewAttachment',
+  async (args) => {
+    const fileName = args.fileName
+    const accessToken = getLocalStorageItem('accessToken')
+    const res = await axios
+      .get(
+        process.env.REACT_APP_BASE_URL + `/notifications/download/${fileName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'blob',
+        },
+      )
+      .then((response) => {
+        if (response?.data.type === 'application/pdf') {
+          const file = new Blob([response.data], { type: 'application/pdf' })
+          const fileURL = URL.createObjectURL(file)
+          window.open(fileURL)
+        }
+      })
+    return res.data
+  },
+)
+
 const noticeSlice = createSlice({
   name: 'noticeSlice',
   initialState: {
@@ -32,6 +88,7 @@ const noticeSlice = createSlice({
       publishedDate: null,
     },
     homeTable: [],
+    attachmentURL: '',
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -39,6 +96,8 @@ const noticeSlice = createSlice({
       state.notices = action.payload
       state.homeTable = handleHomeTableData(
         action.payload?.official_notice.data,
+        action.payload?.official_notice,
+        action.meta.arg.order_published_date,
       )
     })
     builder.addCase(getNoticeDetail.fulfilled, (state, action) => {

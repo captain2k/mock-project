@@ -3,10 +3,12 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getWorksheetData } from '../../../store/reducer/worksheetSlice'
+import { handleWorksheetTableData } from '../../../utils/helpers/handleTableData'
 import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 import LateEarly from '../popup/LateEarly/LateEarly'
 import Leave from '../popup/Leave/Leave'
+import RegisterForget from '../popup/RegisterForget/RegisterForget'
 import TimeLog from '../TimeLog/TimeLog'
 
 const TableWorksheet = () => {
@@ -15,6 +17,8 @@ const TableWorksheet = () => {
   const worksheetData = useSelector(getWorksheetData)
   const [isLateEarlyVisible, setIsLateEarlyVisible] = useState(false)
   const [isLeaveVisible, setIsLeaveVisible] = useState(false)
+  const [isRegisterForgetVisible, setIsRegisterForgetVisible] = useState(false)
+  const [dataRegisterForget, setDataRegisterForget] = useState({})
   const [isShowTimeLog, setIsShowTimeLog] = useState(false)
   const [dataSource, setDataSource] = useState([])
   const [date, setDate] = useState()
@@ -31,7 +35,7 @@ const TableWorksheet = () => {
           per_page: 30,
         },
       })
-      setDataSource(res.data.worksheet.data)
+      setDataSource(handleWorksheetTableData(res.data.worksheet.data))
     }
 
     firstGetDate()
@@ -128,10 +132,10 @@ const TableWorksheet = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: () => {
+      render: (text, record, index) => {
         return (
           <div className="flex">
-            <span>Forget</span>
+            <span onClick={() => showRegisterForget(record)}>Forget</span>
             <Divider type="vertical" />
             <span onClick={showLateEarly}>Late/Early</span>
             <Divider type="vertical" />
@@ -150,6 +154,30 @@ const TableWorksheet = () => {
 
   const showLeave = () => {
     setIsLeaveVisible(true)
+  }
+
+  const showRegisterForget = (data) => {
+    const id = data.key
+    axiosPrivate
+      .get(`worksheet/${id}?type=1`)
+      .then((res) => res.data)
+      .then((dataAPI) => {
+        console.log('status: ', dataAPI.status)
+        if (dataAPI.status === undefined) {
+          console.log('Chua gui request', data)
+          setDataRegisterForget(data)
+        }
+        if (dataAPI.status === 0) {
+          const checkin_original = data.checkin_original
+          const checkout_original = data.checkout_original
+          setDataRegisterForget({
+            ...dataAPI,
+            checkin_original,
+            checkout_original,
+          })
+        }
+      })
+      .then(() => setIsRegisterForgetVisible(true))
   }
 
   const getDate = (date) => {
@@ -193,6 +221,12 @@ const TableWorksheet = () => {
         setIsLeaveVisible={setIsLeaveVisible}
       />
 
+      <RegisterForget
+        dataRegisterForget={dataRegisterForget}
+        setDataRegisterForget={setDataRegisterForget}
+        isRegisterForgetVisible={isRegisterForgetVisible}
+        setIsRegisterForgetVisible={setIsRegisterForgetVisible}
+      />
       <TimeLog
         isShowTimeLog={isShowTimeLog}
         setIsShowTimeLog={setIsShowTimeLog}

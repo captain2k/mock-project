@@ -1,8 +1,9 @@
-import { FormOutlined, LogoutOutlined } from '@ant-design/icons'
+import { EditOutlined, FormOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link, NavLink } from 'react-router-dom'
+import ProfileScreen from '../../components/ProfileScreen/ProfileScreen'
 import { saveUserProfile } from '../../store/reducer/userProfileSlice'
 import useAxiosPrivate from '../../utils/requests/useAxiosPrivate'
 import ChangePassPopup from './ChangePassPopup/ChangePassPopup'
@@ -12,9 +13,10 @@ import logo from './logo.png'
 const Header = () => {
   const [showSubMenu, setShowSubMenu] = useState(false)
   const [toggleModal, setToggleModal] = useState(false)
-  const userProfile = useSelector((state) => state.userProfileSlice)
+  const [showProFileScreen, setShowProfileScreen] = useState(false)
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
+
   const dispatch = useDispatch()
   useEffect(() => {
     async function getProfileUser() {
@@ -26,6 +28,7 @@ const Header = () => {
     }
     getProfileUser()
   }, [axiosPrivate, dispatch])
+
   const handleLogOut = async () => {
     const res = await axiosPrivate.delete('/auth/logout')
     if (res.status === 200) {
@@ -39,10 +42,19 @@ const Header = () => {
     setToggleModal(true)
   }
 
+  const handleShowProfileScreen = () => {
+    setShowSubMenu(false)
+    setShowProfileScreen(true)
+  }
+
+  const handleHideProfileScreen = () => {
+    setShowProfileScreen(false)
+  }
+
   return (
     <div className="navbar" id="header">
       <div className="navbar-left">
-        <Link className="logo-link" to="/edit-profile">
+        <Link className="logo-link" to="/">
           <div className="logo">
             <img src={logo} alt="logo" className="logo-image"></img>
             <div className="logo-name">Relipa Portal</div>
@@ -56,7 +68,7 @@ const Header = () => {
             </NavLink>
           </div>
           <div className="wrap-link">
-            <NavLink className="link" to="/edit-profile">
+            <NavLink className="link" to="/worksheet">
               <span>Timesheet</span>
               <div className="underline-link"></div>
             </NavLink>
@@ -69,16 +81,20 @@ const Header = () => {
             className="user-function"
             onClick={() => setShowSubMenu(!showSubMenu)}
           >
-            <div className="user-name">{userProfile.full_name}</div>
+            <div className="user-name">
+              {localStorage.getItem('full_name')
+                ? localStorage.getItem('full_name')
+                : 'Unknown'}
+            </div>
             <div className="user-avatar">
-              {userProfile.avatar ? (
+              {localStorage.getItem('avatar') === 'null' ? (
+                <img className="avatar" alt="avatar" src={defaultAvatar}></img>
+              ) : (
                 <img
                   className="avatar"
                   alt="avatar"
-                  src={userProfile.avatar}
+                  src={localStorage.getItem('avatar')}
                 ></img>
-              ) : (
-                <img className="avatar" alt="avatar" src={defaultAvatar}></img>
               )}
             </div>
           </div>
@@ -87,6 +103,10 @@ const Header = () => {
               <div className="sub-menu-item" onClick={handleClickChangePass}>
                 <FormOutlined className="icon" />
                 Change pass
+              </div>
+              <div className="sub-menu-item" onClick={handleShowProfileScreen}>
+                <EditOutlined className="icon" />
+                Edit Profile
               </div>
               <div className="sub-menu-item" onClick={handleLogOut}>
                 <LogoutOutlined className="icon" />
@@ -106,6 +126,10 @@ const Header = () => {
           onClick={() => setShowSubMenu(false)}
         ></div>
       )}
+      <ProfileScreen
+        showProFileScreen={showProFileScreen}
+        handleHideProfileScreen={handleHideProfileScreen}
+      />
     </div>
   )
 }

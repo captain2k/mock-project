@@ -5,7 +5,9 @@ const userProfileSlice = createSlice({
   name: 'userProfile',
   initialState,
   reducers: {
-    saveUserProfile: (state, action) => (state = action.payload),
+    saveUserProfile: (state, action) => {
+      return (state = action.payload)
+    },
   },
 })
 
