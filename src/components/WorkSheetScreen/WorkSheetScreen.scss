@@ -121,17 +121,14 @@
   }
 }
 
-.color-red-late {
-  .ant-table-cell:nth-child(5) {
+.color-red {
     color: red;
-  }
-}
-.color-red-early {
-  .ant-table-cell:nth-child(6) {
-    color: red;
-  }
 }
 
+.bg-color-yeloww {
+  background-color: rgba(162, 202, 28, 0.727);
+}
+ 
 .mr-12 {
   margin-right: 12px;
 }
