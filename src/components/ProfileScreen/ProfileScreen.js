@@ -159,6 +159,8 @@ const Profile = () => {
               memberCode={profileUser.member_code}
               fullName={profileUser.full_name}
               phoneNumber={profileUser.phone}
+              avatar_official={profileUser.avatar_official}
+              avatar={profileUser.avatar}
             />
             <div className="user-info-form-first">
               {/* Left */}
