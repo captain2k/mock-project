@@ -1,9 +1,6 @@
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons'
 import { Button, Pagination, Select } from 'antd'
-import moment from 'moment'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { getWorksheet } from '../../store/reducer/worksheetSlice'
+import { useState } from 'react'
 import TableWorksheet from './TableWorksheet/TableWorksheet'
 import WorkSheetFilter from './WorksheetFilter/WorksheetFilter'
 import './WorkSheetScreen.scss'
@@ -11,23 +8,8 @@ import './WorkSheetScreen.scss'
 const { Option } = Select
 
 const WorkSheet = () => {
-  const today = moment().format('YYYY-MM-DD')
-  const firstDayOfRecentMonth = moment().startOf('month').format('YYYY-MM-DD')
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(30)
-
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const paramTimesheet = {
-      start_date: firstDayOfRecentMonth,
-      end_start: today,
-      work_date: 'asc',
-      page: 1,
-      per_page: 30,
-    }
-    dispatch(getWorksheet(paramTimesheet))
-  }, [dispatch, firstDayOfRecentMonth, today])
 
   const handlePaginate = (page) => {
     setPage(page)

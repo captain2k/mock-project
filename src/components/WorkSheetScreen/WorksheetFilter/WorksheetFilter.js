@@ -7,6 +7,7 @@ import {
   getWorksheetLoading,
 } from '../../../store/reducer/worksheetSlice'
 import { convertMomentToString } from '../../../utils/helpers/convertTime'
+import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 
 const { Option } = Select
 
@@ -28,7 +29,6 @@ const WorkSheetFilter = ({ page, perPage }) => {
   const dispatch = useDispatch()
 
   const handleSearch = (value) => {
-    console.log(page, perPage)
     let { radio_filter, select_filter, ...newParam } = value
     let paramTimesheet
     if (radio_filter === 1) {
@@ -65,15 +65,13 @@ const WorkSheetFilter = ({ page, perPage }) => {
       }
     }
     if (radio_filter === 2) {
-      console.log(convertMomentToString(value.start_date))
-      console.log(value.start_date)
-      console.log({
+      paramTimesheet = {
         ...newParam,
         start_date: convertMomentToString(value.start_date),
         end_start: convertMomentToString(value.end_start),
-      })
+      }
     }
-    console.log(paramTimesheet)
+
     dispatch(getWorksheet(paramTimesheet))
   }
 
@@ -125,10 +123,8 @@ const WorkSheetFilter = ({ page, perPage }) => {
                       name="start_date"
                       rules={[
                         {
-                          pattern: new RegExp(
-                            /(^(((0[1-9]|1[0-9]|2[0-8])[/](0[1-9]|1[012]))|((29|30|31)[/](0[13578]|1[02]))|((29|30)[/](0[4,6,9]|11)))[/](19|[2-9][0-9])dd$)|(^29[/]02[/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)*$)/,
-                          ),
-                          message: 'DD/MM/YYYY',
+                          required: true,
+                          message: MESSAGE_REQUIRED,
                         },
                       ]}
                     >
@@ -136,13 +132,21 @@ const WorkSheetFilter = ({ page, perPage }) => {
                         placeholder="DD/MM/YYYY"
                         format="DD/MM/YYYY"
                         disabled={radioValue === 1}
-                        // onChange={handleChange}
                       />
                     </Form.Item>
                     <span style={{ marginLeft: 20, marginRight: 20 }}>to</span>
-                    <Form.Item name="end_start">
+                    <Form.Item
+                      name="end_start"
+                      rules={[
+                        {
+                          required: true,
+                          message: MESSAGE_REQUIRED,
+                        },
+                      ]}
+                    >
                       <DatePicker
                         placeholder="DD/MM/YYYY"
+                        format="DD/MM/YYYY"
                         disabled={radioValue === 1}
                         disabledDate={(d) => d.isAfter(new Date())}
                       />

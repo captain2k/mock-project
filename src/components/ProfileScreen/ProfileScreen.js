@@ -3,6 +3,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import XIcon from '../../common/XIcon/XIcon'
 import { convertTimeToIso } from '../../utils/helpers/convertTime'
+import { getLocalStorageItem } from '../../utils/helpers/handleLocalStorageItems'
 import useAxiosPrivate from '../../utils/requests/useAxiosPrivate'
 import FormFirstLeft from './FormFirstLeft/FormFirstLeft'
 import FormFirstRight from './FormFirstRight/FormFirstRight'
@@ -38,22 +39,28 @@ const Profile = () => {
     const identity_card_date = moment(values['identity_card_date']).format(
       'YYYY-MM-DD',
     )
-    const passport_expiration = moment(values['passport_expiration']).format(
-      'YYYY-MM-DD',
-    )
-
-    // let uploadTask = storage
-    //   .ref('images')
-    //   .child(`${values['avatar_official'][0].name}`)
-    //   .put(values['avatar_official'][0].name)
-
+    let passport_expiration = null
+    if (values['passport_expiration']) {
+      passport_expiration = moment(values['passport_expiration']).format(
+        'YYYY-MM-DD',
+      )
+    }
+    let avatar = null
+    let avatar_official = null
+    if (values['avatar_official']) {
+      avatar_official = getLocalStorageItem('officialAvatar')
+    }
+    if (values['avatar']) {
+      avatar = getLocalStorageItem('subAvatar')
+    }
     const updatedData = {
       ...values,
       birth_date,
       identity_card_date,
       passport_expiration,
+      avatar,
+      avatar_official,
     }
-
     const res = await axiosPrivate.put(`member/profile/update`, updatedData)
     if (res.status === 200) {
       message.success('Update profile successfully!')
@@ -61,7 +68,6 @@ const Profile = () => {
   }
 
   const handleError = (err) => {
-    console.log(err)
     message.error('Update profile unsuccessfully!')
   }
 
@@ -110,8 +116,6 @@ const Profile = () => {
           <Form
             name="userInfo"
             initialValues={{
-              avatar: profileUser.avatar,
-              avatar_official: profileUser.avatar_official,
               gender: profileUser.gender,
               birth_date:
                 profileUser.birth_date &&
@@ -155,8 +159,6 @@ const Profile = () => {
               memberCode={profileUser.member_code}
               fullName={profileUser.full_name}
               phoneNumber={profileUser.phone}
-              avatar_official={profileUser.avatar_official}
-              avatar={profileUser.avatar}
             />
             <div className="user-info-form-first">
               {/* Left */}

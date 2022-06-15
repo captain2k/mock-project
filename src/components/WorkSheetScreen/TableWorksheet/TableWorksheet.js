@@ -1,14 +1,42 @@
 import { Divider, Table } from 'antd'
-import { useState } from 'react'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getWorksheetData } from '../../../store/reducer/worksheetSlice'
+import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
+import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 import LateEarly from '../popup/LateEarly/LateEarly'
 import Leave from '../popup/Leave/Leave'
+import TimeLog from '../TimeLog/TimeLog'
 
 const TableWorksheet = () => {
+  const today = moment().format('YYYY-MM-DD')
+  const firstDayOfRecentMonth = moment().startOf('month').format('YYYY-MM-DD')
   const worksheetData = useSelector(getWorksheetData)
   const [isLateEarlyVisible, setIsLateEarlyVisible] = useState(false)
   const [isLeaveVisible, setIsLeaveVisible] = useState(false)
+  const [isShowTimeLog, setIsShowTimeLog] = useState(false)
+  const [dataSource, setDataSource] = useState([])
+  const [date, setDate] = useState()
+  const axiosPrivate = useAxiosPrivate()
+
+  useEffect(() => {
+    const firstGetDate = async () => {
+      const res = await axiosPrivate.get(`/worksheet/my-timesheet`, {
+        params: {
+          start_date: firstDayOfRecentMonth,
+          end_start: today,
+          work_date: 'asc',
+          page: 1,
+          per_page: 30,
+        },
+      })
+      setDataSource(res.data.worksheet.data)
+    }
+
+    firstGetDate()
+  }, [axiosPrivate, firstDayOfRecentMonth, today])
+
   const columns = [
     {
       title: 'No',
@@ -35,11 +63,25 @@ const TableWorksheet = () => {
       title: 'Late',
       dataIndex: 'late',
       key: 'late',
+      render: (late) => {
+        if (late) {
+          return <span className="color-red">{late}</span>
+        } else {
+          return ''
+        }
+      },
     },
     {
       title: 'Early',
       dataIndex: 'early',
       key: 'early',
+      render: (early) => {
+        if (early) {
+          return <span className="color-red">{early}</span>
+        } else {
+          return ''
+        }
+      },
     },
     {
       title: 'In Office',
@@ -110,28 +152,36 @@ const TableWorksheet = () => {
     setIsLeaveVisible(true)
   }
 
-  const handleHighlight = (record) => {
-    let color
-    if (!record.checkin) {
-      color = 'color-red-late'
+  const getDate = (date) => {
+    setDate(date)
+  }
+
+  const handleTimeLog = (record, index) => {
+    return {
+      onDoubleClick: () => {
+        getDate(record.work_date)
+        setIsShowTimeLog(true)
+      },
     }
-    if (!record.checkout) {
-      color = 'color-red-early'
+  }
+
+  const handleHighlight = (record, index) => {
+    const formatDate = changeFormatDate(record.work_date.slice(0, 10))
+    if (moment(formatDate).day() === 0 || moment(formatDate).day() === 6) {
+      return 'bg-color-yeloww'
     }
-    if (!record.checkin && !record.checkout) {
-      color = 'color-red-late color-red-early'
-    }
-    return color
+    return ''
   }
 
   return (
     <>
       <Table
         rowClassName={handleHighlight}
-        dataSource={worksheetData}
+        dataSource={dataSource.length > 0 ? dataSource : worksheetData}
         columns={columns}
         bordered
         pagination={false}
+        onRow={handleTimeLog}
       />
       <LateEarly
         isLateEarlyVisible={isLateEarlyVisible}
@@ -141,6 +191,12 @@ const TableWorksheet = () => {
       <Leave
         isLeaveVisible={isLeaveVisible}
         setIsLeaveVisible={setIsLeaveVisible}
+      />
+
+      <TimeLog
+        isShowTimeLog={isShowTimeLog}
+        setIsShowTimeLog={setIsShowTimeLog}
+        date={date}
       />
     </>
   )

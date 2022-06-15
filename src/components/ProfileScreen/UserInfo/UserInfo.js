@@ -1,28 +1,27 @@
 import { Avatar, Button, Form, message, Tooltip, Upload } from 'antd'
 import { useState } from 'react'
+import { storage } from '../../../firebase'
+import {
+  getLocalStorageItem,
+  setLocalStorage,
+} from '../../../utils/helpers/handleLocalStorageItems'
 
-function UserInfo({
-  mail,
-  memberCode,
-  phoneNumber,
-  fullName,
-  avatar_official,
-  avatar,
-}) {
-  const [src, setSrc] = useState('')
+function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
+  const [avatarOfficial, setAvatarOfficial] = useState('')
+  const [subAvatar, setSubAvatar] = useState('')
   const normFile = (e) => {
-    console.log('Upload event:', e)
     if (Array.isArray(e)) {
       return e
     }
     return e && e.fileList
   }
 
-  const props = {
+  const propsAvatarOfficial = {
     beforeUpload: (file) => {
       const isOverLimitSize = file.size < 4000000
       const isPNG = file.type === 'image/png'
       const isJPG = file.type === 'image/jpeg'
+      const filename = new Date() + '-' + file.name
       if (!isOverLimitSize) {
         message.error(`This file greater than 4MB`)
       }
@@ -34,16 +33,101 @@ function UserInfo({
         reader.addEventListener(
           'load',
           function () {
-            setSrc(reader.result)
+            setAvatarOfficial(reader.result)
           },
           false,
         )
         reader.readAsDataURL(file)
+        const metaData = {
+          contentType: file.type,
+        }
+        let uploadTask = storage.ref('avatars/' + filename).put(file, metaData)
+        uploadTask.on(
+          'state_change',
+          (snapshot) => {
+            switch (snapshot.state) {
+              case 'paused':
+                break
+              case 'running':
+                break
+              default:
+                break
+            }
+          },
+          (error) => {
+            alert(error.message)
+          },
+          () => {
+            storage
+              .ref('avatars/' + filename)
+              .getDownloadURL()
+              .then((url) => {
+                setLocalStorage('officialAvatar', url)
+              })
+          },
+        )
         message.success(`Upload successfully`)
       }
       return isOverLimitSize || isPNG || isJPG || Upload.LIST_IGNORE
     },
   }
+  const propsAvatarSub = {
+    beforeUpload: (file) => {
+      const isOverLimitSize = file.size < 4000000
+      const isPNG = file.type === 'image/png'
+      const isJPG = file.type === 'image/jpeg'
+      const filename = new Date() + '-' + file.name
+      if (!isOverLimitSize) {
+        message.error(`This file greater than 4MB`)
+      }
+      if (!isPNG && !isJPG) {
+        message.error(`${file.name} should be a PNG or JPG file!`)
+      }
+      if (isOverLimitSize && (isPNG || isJPG)) {
+        let reader = new FileReader()
+        reader.addEventListener(
+          'load',
+          function () {
+            setSubAvatar(reader.result)
+          },
+          false,
+        )
+        reader.readAsDataURL(file)
+        const metaData = {
+          contentType: file.type,
+        }
+        let uploadTask = storage.ref('avatars/' + filename).put(file, metaData)
+        uploadTask.on(
+          'state_change',
+          (snapshot) => {
+            switch (snapshot.state) {
+              case 'paused':
+                break
+              case 'running':
+                break
+              default:
+                break
+            }
+          },
+          (error) => {
+            alert(error.message)
+          },
+          () => {
+            storage
+              .ref('avatars/' + filename)
+              .getDownloadURL()
+              .then((url) => {
+                setLocalStorage('subAvatar', url)
+              })
+          },
+        )
+        message.success(`Upload successfully`)
+      }
+
+      return isOverLimitSize || isPNG || isJPG || Upload.LIST_IGNORE
+    },
+  }
+
   return (
     <Form.Item>
       <div className="user-info">
@@ -52,14 +136,18 @@ function UserInfo({
             <Avatar
               shape="square"
               size={100}
-              src={src ? src : avatar_official}
+              src={
+                avatarOfficial
+                  ? avatarOfficial
+                  : getLocalStorageItem('avatarOfficial')
+              }
             />
             <Form.Item
               name="avatar_official"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
-              <Upload {...props}>
+              <Upload {...propsAvatarOfficial}>
                 <Button size="small" className="primary-button">
                   Upload avatar
                 </Button>
@@ -67,13 +155,17 @@ function UserInfo({
             </Form.Item>
           </div>
           <div className="user-info-sub-avatar">
-            <Avatar shape="square" size={60} src={src ? src : avatar} />
+            <Avatar
+              shape="square"
+              size={60}
+              src={subAvatar ? subAvatar : getLocalStorageItem('subAvatar')}
+            />
             <Form.Item
               name="avatar"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
-              <Upload {...props}>
+              <Upload {...propsAvatarSub}>
                 <Button size="small" className="outline-primary-button">
                   Upload
                 </Button>
