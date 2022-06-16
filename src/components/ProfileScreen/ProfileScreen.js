@@ -52,6 +52,7 @@ const Profile = ({ showProFileScreen, handleHideProfileScreen }) => {
     if (values['avatar']) {
       avatar = getLocalStorageItem('subAvatar')
     }
+
     const updatedData = {
       ...values,
       birth_date,
@@ -63,6 +64,7 @@ const Profile = ({ showProFileScreen, handleHideProfileScreen }) => {
     const res = await axiosPrivate.put(`member/profile/update`, updatedData)
     if (res.status === 200) {
       message.success('Update profile successfully!')
+      handleHideProfileScreen()
     }
   }
 

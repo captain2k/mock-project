@@ -59,7 +59,6 @@ export default function LateEarly({
       compensation_time: '00:16',
       reason: values['reason'],
     }
-    console.log(newRequest)
     dispatch(submitLateEarly(newRequest))
     setIsLateEarlyVisible(false)
   }
@@ -70,7 +69,6 @@ export default function LateEarly({
       request_for_date: registerForDate,
       action: 'delete',
     }
-    console.log(deleteRequest)
   }
 
   /* eslint-disable no-template-curly-in-string */

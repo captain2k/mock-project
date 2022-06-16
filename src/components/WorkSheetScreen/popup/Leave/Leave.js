@@ -65,14 +65,11 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
       request_for_date: registerForDate,
       action: 'delete',
     }
-    console.log(deleteRequest)
   }
 
   const onFinish = (values) => {
-    console.log(values)
     let newRequest
     if (isLeaveAllDay) {
-      console.log(values['start_time']['_i'])
       newRequest = {
         leave_all_day: 1,
         request_type: Number(values['paid_unpaid'] + 1),
@@ -86,7 +83,6 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
       const rangeStartEnd = changeTimeToMint(rangeEnd)
       if (rangeStartEnd > rangeStartNumber) {
         setTimeCount(calculateTime(rangeEnd, rangeStart))
-        console.log(values['start_time']['_i'])
         newRequest = {
           leave_start: rangeStart,
           leave_end: rangeEnd,
@@ -100,11 +96,9 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
         message.error(`Please choose end time after start time!!!`)
       }
     }
-    console.log(newRequest)
   }
 
   const onChangeLeaveAllDay = (e) => {
-    console.log(`checked = ${e.target.checked}`)
     setIsLeaveAllDay(e.target.checked)
   }
 

@@ -1,9 +1,11 @@
-import { Divider, Table } from 'antd'
+import { Divider, Select, Table } from 'antd'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getWorksheetData } from '../../../store/reducer/worksheetSlice'
-import { handleWorksheetTableData } from '../../../utils/helpers/handleTableData'
+import {
+  getWorksheetData,
+  getWorksheetTotal,
+} from '../../../store/reducer/worksheetSlice'
 import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 import LateEarly from '../popup/LateEarly/LateEarly'
@@ -11,35 +13,20 @@ import Leave from '../popup/Leave/Leave'
 import RegisterForget from '../popup/RegisterForget/RegisterForget'
 import TimeLog from '../TimeLog/TimeLog'
 
+const { Option } = Select
+
 const TableWorksheet = () => {
-  const today = moment().format('YYYY-MM-DD')
-  const firstDayOfRecentMonth = moment().startOf('month').format('YYYY-MM-DD')
   const worksheetData = useSelector(getWorksheetData)
   const [isLateEarlyVisible, setIsLateEarlyVisible] = useState(false)
   const [isLeaveVisible, setIsLeaveVisible] = useState(false)
   const [isRegisterForgetVisible, setIsRegisterForgetVisible] = useState(false)
   const [dataRegisterForget, setDataRegisterForget] = useState({})
   const [isShowTimeLog, setIsShowTimeLog] = useState(false)
-  const [dataSource, setDataSource] = useState([])
   const [date, setDate] = useState()
+  const [perPage, setPerPage] = useState(30)
   const axiosPrivate = useAxiosPrivate()
-
-  useEffect(() => {
-    const firstGetDate = async () => {
-      const res = await axiosPrivate.get(`/worksheet/my-timesheet`, {
-        params: {
-          start_date: firstDayOfRecentMonth,
-          end_start: today,
-          work_date: 'asc',
-          page: 1,
-          per_page: 30,
-        },
-      })
-      setDataSource(handleWorksheetTableData(res.data.worksheet.data))
-    }
-
-    firstGetDate()
-  }, [axiosPrivate, firstDayOfRecentMonth, today])
+  const totalRecordStore = useSelector(getWorksheetTotal)
+  console.log(worksheetData)
 
   const columns = [
     {
@@ -162,9 +149,7 @@ const TableWorksheet = () => {
       .get(`worksheet/${id}?type=1`)
       .then((res) => res.data)
       .then((dataAPI) => {
-        console.log('status: ', dataAPI.status)
         if (dataAPI.status === undefined) {
-          console.log('Chua gui request', data)
           setDataRegisterForget(data)
         }
         if (dataAPI.status === 0) {
@@ -186,7 +171,7 @@ const TableWorksheet = () => {
 
   const handleTimeLog = (record, index) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         getDate(record.work_date)
         setIsShowTimeLog(true)
       },
@@ -200,17 +185,30 @@ const TableWorksheet = () => {
     }
     return ''
   }
-
   return (
     <>
-      <Table
-        rowClassName={handleHighlight}
-        dataSource={dataSource.length > 0 ? dataSource : worksheetData}
-        columns={columns}
-        bordered
-        pagination={false}
-        onRow={handleTimeLog}
-      />
+      <div className="worksheet-per-page">
+        <h3>Totals number of records:{totalRecordStore}</h3>
+        <div className="per-page-select">
+          <label>Items per page</label>
+          <Select defaultValue={30} onChange={(value) => setPerPage(value)}>
+            <Option value={30}>30</Option>
+            <Option value={50}>50</Option>
+            <Option value={100}>100</Option>
+          </Select>
+        </div>
+      </div>
+      <div className="worksheet-table">
+        <Table
+          rowClassName={handleHighlight}
+          dataSource={worksheetData}
+          columns={columns}
+          bordered
+          pagination={false}
+          onRow={handleTimeLog}
+        />
+      </div>
+
       <LateEarly
         isLateEarlyVisible={isLateEarlyVisible}
         setIsLateEarlyVisible={setIsLateEarlyVisible}

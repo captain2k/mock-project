@@ -1,6 +1,6 @@
 import { AutoComplete, Form, Input, Select } from 'antd'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { API_BANK_LIST } from '../../../services/apiBankList'
 import { MESSAGE_REQUIRED } from '../../../utils/helpers/message'
 
@@ -86,7 +86,6 @@ function FormFirstRight() {
             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }
         />
-        {/* <Input className="input-primary" /> */}
       </Form.Item>
       <Form.Item
         label="Bank Account"
@@ -122,10 +121,10 @@ function FormFirstRight() {
         ]}
       >
         <Select>
-          <Option value={1}>Single</Option>
-          <Option value={2}>Married</Option>
-          <Option value={3}>Divorced</Option>
-          <Option value={4}>Other</Option>
+          <Option value={0}>Single</Option>
+          <Option value={1}>Married</Option>
+          <Option value={2}>Divorced</Option>
+          <Option value={3}>Other</Option>
         </Select>
       </Form.Item>
       <Form.Item

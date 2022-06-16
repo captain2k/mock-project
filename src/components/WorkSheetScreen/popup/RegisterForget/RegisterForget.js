@@ -14,7 +14,6 @@ const RegisterForget = ({
   const format = 'HH:mm'
   const axiosPrivate = useAxiosPrivate()
   const registerForgetForm = useRef()
-  console.log('data Register: ', dataRegisterForget)
   let registerForDate
   let checkinForm
   let checkoutForm
@@ -22,7 +21,6 @@ const RegisterForget = ({
   // Chưa gửi request
   if (dataRegisterForget.status === undefined) {
     registerForDate = dataRegisterForget.work_date
-    console.log('register Date:', registerForDate)
 
     if (registerForDate) {
       registerForDate = registerForDate.slice(0, 10)
@@ -39,7 +37,6 @@ const RegisterForget = ({
     checkinForm = moment(checkinForm).format('HH:mm')
     checkoutForm = dataRegisterForget.checkout
     checkoutForm = moment(checkoutForm).format('HH:mm')
-    console.log(checkinForm, checkoutForm)
   }
 
   // Xử lí sự kiện của FORM

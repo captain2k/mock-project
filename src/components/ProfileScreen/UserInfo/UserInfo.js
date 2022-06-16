@@ -1,10 +1,7 @@
 import { Avatar, Button, Form, message, Tooltip, Upload } from 'antd'
 import { useState } from 'react'
 import { storage } from '../../../firebase'
-import {
-  getLocalStorageItem,
-  setLocalStorage,
-} from '../../../utils/helpers/handleLocalStorageItems'
+import { setLocalStorage } from '../../../utils/helpers/handleLocalStorageItems'
 
 function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
   const [avatarOfficial, setAvatarOfficial] = useState('')
@@ -139,7 +136,7 @@ function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
               src={
                 avatarOfficial
                   ? avatarOfficial
-                  : getLocalStorageItem('avatarOfficial')
+                  : JSON.parse(localStorage.getItem('officialAvatar'))
               }
             />
             <Form.Item
@@ -158,7 +155,11 @@ function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
             <Avatar
               shape="square"
               size={60}
-              src={subAvatar ? subAvatar : getLocalStorageItem('subAvatar')}
+              src={
+                subAvatar
+                  ? subAvatar
+                  : JSON.parse(localStorage.getItem('subAvatar'))
+              }
             />
             <Form.Item
               name="avatar"

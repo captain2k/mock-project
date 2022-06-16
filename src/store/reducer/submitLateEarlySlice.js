@@ -19,7 +19,6 @@ export const submitLateEarly = createAsyncThunk(
           reason: args.reason,
         },
       )
-      console.log('res', res)
       return res.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data)

@@ -1,11 +1,8 @@
-import { Button, DatePicker, Form, Radio, Select, Space } from 'antd'
+import { Button, DatePicker, Form, message, Radio, Select, Space } from 'antd'
 import moment from 'moment'
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  getWorksheet,
-  getWorksheetLoading,
-} from '../../../store/reducer/worksheetSlice'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { getWorksheet } from '../../../store/reducer/worksheetSlice'
 import { convertMomentToString } from '../../../utils/helpers/convertTime'
 
 const { Option } = Select
@@ -24,54 +21,65 @@ const WorkSheetFilter = ({ page, perPage }) => {
   const firstDayOfYear = moment().startOf('year').format('YYYY-MM-DD')
   const [form] = Form.useForm()
   const [radioValue, setRadioValue] = useState(1)
-  const isLoading = useSelector(getWorksheetLoading)
   const dispatch = useDispatch()
+  const [paramTimesheet, setParamTimesheet] = useState({
+    end_start: today,
+    start_date: firstDayOfRecentMonth,
+    work_date: 'asc',
+    page: 1,
+    per_page: 30,
+  })
+
+  useEffect(() => {
+    dispatch(getWorksheet(paramTimesheet))
+  }, [dispatch, paramTimesheet])
 
   const handleSearch = (value) => {
     let { radio_filter, select_filter, ...newParam } = value
-    let paramTimesheet
     if (radio_filter === 1) {
       if (select_filter === 1) {
-        paramTimesheet = {
+        setParamTimesheet({
           ...newParam,
           start_date: firstDayOfRecentMonth,
           end_start: today,
           page: page,
-          per_page: perPage,
-        }
+          // per_page: perPage,
+        })
       }
       if (select_filter === 2) {
-        paramTimesheet = {
+        setParamTimesheet({
           ...newParam,
           start_date: firstDayOfPreviousMonth,
           end_start: lastDayOfPreviousMonth,
           page: page,
           per_page: perPage,
-        }
+        })
       }
       if (select_filter === 3) {
-        paramTimesheet = {
+        setParamTimesheet({
           ...newParam,
           start_date: firstDayOfYear,
           end_start: today,
           page: page,
           per_page: perPage,
-        }
+        })
       }
       if (select_filter === 4) {
         const { start_date, end_start, ...workByDate } = newParam
-        paramTimesheet = { ...workByDate, page: page, per_page: perPage }
+        setParamTimesheet({ ...workByDate, page: page, per_page: perPage })
       }
     }
     if (radio_filter === 2) {
-      paramTimesheet = {
+      if (newParam.start_date.isAfter(newParam.end_start)) {
+        message.warning('Invalid date')
+        return
+      }
+      setParamTimesheet({
         ...newParam,
         start_date: convertMomentToString(value.start_date),
         end_start: convertMomentToString(value.end_start),
-      }
+      })
     }
-
-    dispatch(getWorksheet(paramTimesheet))
   }
 
   const handleReset = () => {
@@ -118,15 +126,7 @@ const WorkSheetFilter = ({ page, perPage }) => {
                     </Select>
                   </Form.Item>
                   <div className="worksheet-filter-left-by-day">
-                    <Form.Item
-                      name="start_date"
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: MESSAGE_REQUIRED,
-                      //   },
-                      // ]}
-                    >
+                    <Form.Item name="start_date">
                       <DatePicker
                         placeholder="DD/MM/YYYY"
                         format="DD/MM/YYYY"
@@ -134,15 +134,7 @@ const WorkSheetFilter = ({ page, perPage }) => {
                       />
                     </Form.Item>
                     <span style={{ marginLeft: 20, marginRight: 20 }}>to</span>
-                    <Form.Item
-                      name="end_start"
-                      // rules={[
-                      // {
-                      //   required: true,
-                      //     message: MESSAGE_REQUIRED,
-                      //   },
-                      // ]}
-                    >
+                    <Form.Item name="end_start">
                       <DatePicker
                         placeholder="DD/MM/YYYY"
                         format="DD/MM/YYYY"
@@ -165,11 +157,7 @@ const WorkSheetFilter = ({ page, perPage }) => {
             <div className="worksheet-filter-button">
               <Form.Item>
                 <Space size="large">
-                  <Button
-                    className="primary-button"
-                    htmlType="submit"
-                    loading={isLoading}
-                  >
+                  <Button className="primary-button" htmlType="submit">
                     Search
                   </Button>
                   <Button
