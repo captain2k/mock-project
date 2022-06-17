@@ -202,14 +202,20 @@ const TableWorksheet = () => {
 
   const handleTimeLog = (record, index) => {
     return {
-      onClick: () => {
+      onDoubleClick: () => {
         getDate(record.work_date)
         setIsShowTimeLog(true)
       },
     }
   }
 
-  const handleHighlight = (record, index) => {}
+  const handleHighlight = (record, index) => {
+    // const formatDate = record.work_date.slice(0, 10)
+    // console.log(moment(formatDate).isoWeekday(1))
+    // console.log(moment(formatDate).format('YYYY-MM-DD'))
+    // console.log(moment(formatDate).weekday(), formatDate)
+    // console.log(moment.locale())
+  }
   return (
     <>
       <div className="worksheet-per-page">

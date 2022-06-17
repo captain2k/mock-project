@@ -4,7 +4,6 @@ import {
   convertDateTimeToTime,
   convertDayToShortDay,
 } from '../../../utils/helpers/convertTime'
-import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 
 const TimeLog = ({ isShowTimeLog, setIsShowTimeLog, date }) => {
@@ -14,7 +13,7 @@ const TimeLog = ({ isShowTimeLog, setIsShowTimeLog, date }) => {
   useEffect(() => {
     if (date) {
       const dateCutDay = date.slice(0, 10)
-      const dateForm = changeFormatDate(dateCutDay)
+      const dateForm = dateCutDay.split('/').reverse().join('-')
       const getResource = async () => {
         const res = await axiosPrivate.get(
           `/worksheet/checkLogs?date=${dateForm}`,
