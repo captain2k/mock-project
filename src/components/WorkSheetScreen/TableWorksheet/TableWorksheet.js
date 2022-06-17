@@ -1,11 +1,13 @@
 import { Divider, Select, Table } from 'antd'
 import moment from 'moment'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {
   getWorksheetData,
   getWorksheetTotal,
+  isFirstLoad,
 } from '../../../store/reducer/worksheetSlice'
+import { handleWorksheetTableData } from '../../../utils/helpers/handleTableData'
 import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 import LateEarly from '../popup/LateEarly/LateEarly'
@@ -26,7 +28,26 @@ const TableWorksheet = () => {
   const [perPage, setPerPage] = useState(30)
   const axiosPrivate = useAxiosPrivate()
   const totalRecordStore = useSelector(getWorksheetTotal)
-  console.log(worksheetData)
+  const today = moment().format('YYYY-MM-DD')
+  const firstDayOfRecentMonth = moment().startOf('month').format('YYYY-MM-DD')
+  const [firstDataWorksheet, setFirstDataWorksheet] = useState([])
+  const [totalRecord, setTotalRecord] = useState(0)
+  const isFirstLoading = useSelector(isFirstLoad)
+  useEffect(() => {
+    const getFirstData = async () => {
+      const res = await axiosPrivate('/worksheet/my-timesheet', {
+        params: {
+          end_date: today,
+          start_date: firstDayOfRecentMonth,
+          work_date: 'asc',
+          page: 1,
+        },
+      })
+      setFirstDataWorksheet(handleWorksheetTableData(res.data.worksheet.data))
+      setTotalRecord(res.data.worksheet.total)
+    }
+    getFirstData()
+  }, [axiosPrivate, today, firstDayOfRecentMonth])
 
   const columns = [
     {
@@ -188,7 +209,9 @@ const TableWorksheet = () => {
   return (
     <>
       <div className="worksheet-per-page">
-        <h3>Totals number of records:{totalRecordStore}</h3>
+        <h3>{`Totals number of records: ${
+          isFirstLoading ? totalRecord : totalRecordStore
+        }`}</h3>
         <div className="per-page-select">
           <label>Items per page</label>
           <Select defaultValue={30} onChange={(value) => setPerPage(value)}>
@@ -201,7 +224,7 @@ const TableWorksheet = () => {
       <div className="worksheet-table">
         <Table
           rowClassName={handleHighlight}
-          dataSource={worksheetData}
+          dataSource={isFirstLoading ? firstDataWorksheet : worksheetData}
           columns={columns}
           bordered
           pagination={false}

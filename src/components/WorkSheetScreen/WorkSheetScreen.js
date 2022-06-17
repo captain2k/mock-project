@@ -1,13 +1,15 @@
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons'
 import { Button, Pagination } from 'antd'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { getWorksheetTotal } from '../../store/reducer/worksheetSlice'
 import TableWorksheet from './TableWorksheet/TableWorksheet'
 import WorkSheetFilter from './WorksheetFilter/WorksheetFilter'
 import './WorkSheetScreen.scss'
 
 const WorkSheet = () => {
   const [page, setPage] = useState(1)
-
+  const totalRecordStore = useSelector(getWorksheetTotal)
   const handlePaginate = (page) => {
     setPage(page)
   }
@@ -27,7 +29,11 @@ const WorkSheet = () => {
           >
             <DoubleLeftOutlined />
           </Button>
-          <Pagination onChange={handlePaginate} total={30} />
+          <Pagination
+            onChange={handlePaginate}
+            defaultCurrent={page}
+            total={totalRecordStore}
+          />
           <Button
             // disabled={page === totalItem / 10}
             className="outline-secondary-button ml-12"
