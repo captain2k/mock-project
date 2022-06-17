@@ -1,7 +1,10 @@
 import { Avatar, Button, Form, message, Tooltip, Upload } from 'antd'
 import { useState } from 'react'
 import { storage } from '../../../firebase'
-import { setLocalStorage } from '../../../utils/helpers/handleLocalStorageItems'
+import {
+  getLocalStorageItem,
+  setLocalStorage,
+} from '../../../utils/helpers/handleLocalStorageItems'
 
 function UserInfo({ mail, memberCode, phoneNumber, fullName }) {
   const [avatarOfficial, setAvatarOfficial] = useState('')
