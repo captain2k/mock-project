@@ -8,7 +8,6 @@ import {
   isFirstLoad,
 } from '../../../store/reducer/worksheetSlice'
 import { handleWorksheetTableData } from '../../../utils/helpers/handleTableData'
-import changeFormatDate from '../../../utils/helpers/handleTime/changeFormatDate'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
 import LateEarly from '../popup/LateEarly/LateEarly'
 import Leave from '../popup/Leave/Leave'
@@ -26,7 +25,7 @@ const TableWorksheet = () => {
   const [dataRegisterForget, setDataRegisterForget] = useState({})
   const [isShowTimeLog, setIsShowTimeLog] = useState(false)
   const [date, setDate] = useState()
-  const [perPage, setPerPage] = useState(30)
+  // const [perPage, setPerPage] = useState(30)
   const axiosPrivate = useAxiosPrivate()
   const totalRecordStore = useSelector(getWorksheetTotal)
   const today = moment().format('YYYY-MM-DD')
@@ -210,13 +209,7 @@ const TableWorksheet = () => {
     }
   }
 
-  const handleHighlight = (record, index) => {
-    const formatDate = changeFormatDate(record.work_date.slice(0, 10))
-    if (moment(formatDate).day() === 0 || moment(formatDate).day() === 6) {
-      return 'bg-color-yeloww'
-    }
-    return ''
-  }
+  const handleHighlight = (record, index) => {}
   return (
     <>
       <div className="worksheet-per-page">
@@ -225,7 +218,7 @@ const TableWorksheet = () => {
         }`}</h3>
         <div className="per-page-select">
           <label>Items per page</label>
-          <Select defaultValue={30} onChange={(value) => setPerPage(value)}>
+          <Select defaultValue={30}>
             <Option value={30}>30</Option>
             <Option value={50}>50</Option>
             <Option value={100}>100</Option>

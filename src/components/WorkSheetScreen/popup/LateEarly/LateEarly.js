@@ -57,8 +57,6 @@ export default function LateEarly({
   const loadingSubmit = useSelector(getSubmitLateEarlyLoading)
   const loadingUpdate = useSelector(getUpdateLateEarlyLoading)
 
-  console.log(data)
-
   const layout = {
     labelCol: {
       span: 8,
@@ -70,7 +68,6 @@ export default function LateEarly({
 
   const getDataByDate = async (date) => {
     const res = await axiosPrivate.get(`/worksheet/getByDate/${date}`)
-    console.log(res)
     const inOffice = res.data?.in_office || '00:00'
     const time = '10:00'
     const overtime = calculateTime(inOffice, time)
