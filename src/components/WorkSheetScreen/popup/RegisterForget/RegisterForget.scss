@@ -13,12 +13,7 @@
     button {
       display: block;
     }
-    button.register-button,
-    button.update-button {
-      background-color: $bgPrimary;
-    }
-
-    .register-button.hide {
+    .primary-button.hide {
       display: none;
     }
 
@@ -30,15 +25,35 @@
     box-shadow: none !important;
   }
 
-  .checkin,
-  .checkout {
-    display: flex;
-    width: 100%;
+  .checkin-oringinal {
+    position: absolute;
+    right: 450px;
+    top: 197px;
+  }
+  .checkout-original {
+    position: absolute;
+    right: 450px;
+    top: 252px;
   }
 }
 
 @media screen and (max-width: 640px) {
   .ant-modal {
     width: 80% !important;
+  }
+}
+@media screen and (min-width: 641px) and (max-width: 940px) {
+  .ant-modal {
+    width: 80% !important;
+  }
+  .checkin-oringinal {
+    position: absolute;
+    right: 300px !important;
+    top: 140px;
+  }
+  .checkout-original {
+    position: absolute;
+    right: 300px !important;
+    top: 197px;
   }
 }

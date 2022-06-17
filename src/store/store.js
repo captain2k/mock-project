@@ -3,6 +3,7 @@ import loginReducer from '../store/reducer/loginSlice'
 import changePassReducer from './reducer/changePassSlice'
 import homeReducer from './reducer/homeSlice'
 import submitLateEarlyReducer from './reducer/submitLateEarlySlice'
+import updateLateEarlyReducer from './reducer/updateLateEarlySlice'
 import userProfileSlice from './reducer/userProfileSlice'
 import worksheetReducer from './reducer/worksheetSlice'
 export const store = configureStore({
@@ -13,5 +14,6 @@ export const store = configureStore({
     userProfileSlice,
     submitLateEarlyReducer,
     worksheetReducer,
+    updateLateEarlyReducer,
   },
 })

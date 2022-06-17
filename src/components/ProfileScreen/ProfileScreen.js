@@ -63,6 +63,7 @@ const Profile = ({ showProFileScreen, handleHideProfileScreen }) => {
     }
     const res = await axiosPrivate.put(`member/profile/update`, updatedData)
     if (res.status === 200) {
+      handleHideProfileScreen()
       message.success('Update profile successfully!')
       handleHideProfileScreen()
     }
