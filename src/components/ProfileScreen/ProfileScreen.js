@@ -10,7 +10,7 @@ import FormFirstRight from './FormFirstRight/FormFirstRight'
 import FormSecond from './FormSecond/FormSecond'
 import FormThirdLeft from './FormThirdLeft/FormThirdLeft'
 import FormThirdRight from './FormThirdRight/FormThirdRight'
-import './profile.scss'
+import './Profile.scss'
 import UserInfo from './UserInfo/UserInfo'
 
 const Profile = ({ showProFileScreen, handleHideProfileScreen }) => {

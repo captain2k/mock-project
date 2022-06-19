@@ -1,5 +1,5 @@
 import { EditOutlined, FormOutlined, LogoutOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link, NavLink } from 'react-router-dom'
@@ -16,7 +16,11 @@ const Header = () => {
   const [showProFileScreen, setShowProfileScreen] = useState(false)
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
-
+  const subMenu = useRef()
+  const subMenuHeight = useRef()
+  if (subMenu.current) {
+    subMenuHeight.current = 0 - subMenu.current.clientHeight
+  }
   const dispatch = useDispatch()
   useEffect(() => {
     async function getProfileUser() {
@@ -98,7 +102,12 @@ const Header = () => {
               )}
             </div>
           </div>
-          <div className={showSubMenu ? 'sub-menu show' : 'sub-menu hide'}>
+          <div
+            ref={subMenu}
+            id="sub-menu"
+            className={showSubMenu ? 'sub-menu show' : 'sub-menu hide'}
+            style={{ bottom: subMenuHeight.current - 12 }}
+          >
             <div className="sub-menu-items">
               <div className="sub-menu-item" onClick={handleClickChangePass}>
                 <FormOutlined className="icon" />
@@ -111,6 +120,9 @@ const Header = () => {
               <div className="sub-menu-item" onClick={handleLogOut}>
                 <LogoutOutlined className="icon" />
                 Log out
+              </div>
+              <div className="sub-menu-item">
+                <Link to="admin">Admin</Link>
               </div>
             </div>
           </div>

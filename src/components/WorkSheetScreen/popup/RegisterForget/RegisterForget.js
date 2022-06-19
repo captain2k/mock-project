@@ -1,4 +1,14 @@
-import { Button, Checkbox, Form, Input, message, Modal, TimePicker } from 'antd'
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  TimePicker,
+} from 'antd'
 import moment from 'moment'
 import { useRef } from 'react'
 import { MESSAGE_REQUIRED } from '../../../../utils/helpers/message'
@@ -20,6 +30,7 @@ const RegisterForget = ({
   let specialReasonForm
   const status = dataRegisterForget.status
   const error_count = dataRegisterForget.error_count
+  let registrationDateForm
 
   // Chưa gửi request
   if (status === undefined) {
@@ -46,6 +57,8 @@ const RegisterForget = ({
     checkoutForm = moment(checkoutForm).format('HH:mm')
     checkoutForm = moment(checkoutForm, format)
     reasonForm = dataRegisterForget.reason
+    registrationDateForm = dataRegisterForget.create_at
+    registrationDateForm = moment(registrationDateForm).format('DD-MM-YYYY')
     switch (error_count) {
       case 1:
         specialReasonForm = ['Check-in not counted as error']
@@ -107,6 +120,7 @@ const RegisterForget = ({
         error_count: error_count,
       })
       registerForgetForm.current.resetFields()
+      setDataRegisterForget({})
       message.success('Request sent')
     }
     // Đã gửi request
@@ -142,7 +156,7 @@ const RegisterForget = ({
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             initialValues={{
-              registration_date: moment(new Date()).format('DD-MM-YYYY HH:mm '),
+              registration_date: registrationDateForm,
               register_for_date: registerForDate,
               checkin: checkinForm,
               checkout: checkoutForm,
@@ -150,52 +164,86 @@ const RegisterForget = ({
               special_reason: specialReasonForm,
             }}
             labelCol={{ sm: { span: 9 }, lg: { span: 6 }, md: { span: 7 } }}
+            labelWrap={true}
             labelAlign={'left'}
           >
-            <Form.Item label="Registration date" name="registration_date">
-              <Input className="enableFocus" bordered={false} />
-            </Form.Item>
-            <Form.Item label="Register for date:" name="register_for_date">
-              <Input bordered={false} readOnly className="enableFocus" />
-            </Form.Item>
-            <Form.Item
-              label="Checkin:"
-              name="checkin"
-              rules={[{ required: true, message: MESSAGE_REQUIRED }]}
-            >
-              <TimePicker format={format} />
-            </Form.Item>
-            <div className="checkin-oringinal">
-              {`( ${dataRegisterForget.checkin_original} )`}
-            </div>
-            <Form.Item
-              label="Checkout:"
-              name="checkout"
-              rules={[{ required: true, message: MESSAGE_REQUIRED }]}
-            >
-              <TimePicker format={format} />
-            </Form.Item>
+            <Row>
+              <Col sm={9} lg={6} md={7}>
+                Registration Date:
+              </Col>
+              <Form.Item name="registration_date">
+                <Input className="enableFocus" bordered={false} />
+              </Form.Item>
+            </Row>
+            <Row>
+              <Col sm={9} lg={6} md={7}>
+                Register for date:
+              </Col>
+              <Form.Item name="register_for_date">
+                <Input bordered={false} readOnly className="enableFocus" />
+              </Form.Item>
+            </Row>
 
-            <div className="checkout-original">
-              {`( ${dataRegisterForget.checkout_original} )`}
-            </div>
-            <Form.Item label="Special reason:" name="special_reason">
-              <Checkbox.Group
-                options={[
-                  {
-                    label: 'Check-in not counted as error',
-                    value: 'Check-in not counted as error',
-                  },
-                  {
-                    label: 'Check-out not counted as error',
-                    value: 'Check-out not counted as error',
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label="Reason:" name="reason">
-              <Input.TextArea autoSize={{ minRows: 4, maxRows: 7 }} />
-            </Form.Item>
+            <Row>
+              <Col sm={9} lg={6} md={7}>
+                Check-in:<span className="require-icon">*</span>
+              </Col>
+              <Form.Item
+                name="checkin"
+                rules={[{ required: true, message: MESSAGE_REQUIRED }]}
+              >
+                <TimePicker format={format} />
+              </Form.Item>
+              <div className="checkin-original">
+                {`( ${dataRegisterForget.checkin_original} )`}
+              </div>
+            </Row>
+
+            <Row>
+              <Col sm={9} lg={6} md={7}>
+                Check-out:<span className="require-icon">*</span>
+              </Col>
+              <Form.Item
+                name="checkout"
+                rules={[{ required: true, message: MESSAGE_REQUIRED }]}
+              >
+                <TimePicker format={format} />
+              </Form.Item>
+
+              <div className="checkout-original">
+                {`( ${dataRegisterForget.checkout_original} )`}
+              </div>
+            </Row>
+            <Row>
+              <Col sm={9} lg={6} md={7}>
+                Special reason:
+              </Col>
+              <Form.Item name="special_reason">
+                <Checkbox.Group
+                  options={[
+                    {
+                      label: 'Check-in not counted as error',
+                      value: 'Check-in not counted as error',
+                    },
+                    {
+                      label: 'Check-out not counted as error',
+                      value: 'Check-out not counted as error',
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Row>
+            <Row className="register-textarea">
+              <Col sm={9} lg={6} md={7}>
+                Reason:
+              </Col>
+              <Form.Item name="reason">
+                <Input.TextArea
+                  autoSize={{ minRows: 4, maxRows: 7 }}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Row>
             <div className="button">
               <Button
                 htmlType="submit"

@@ -5,6 +5,9 @@
     margin: 0;
     padding: 0;
   }
+  .require-icon {
+    color: #ea5455;
+  }
   .button {
     display: flex;
     justify-content: center;
@@ -24,16 +27,18 @@
   .enableFocus {
     box-shadow: none !important;
   }
-
-  .checkin-oringinal {
-    position: absolute;
-    right: 450px;
-    top: 197px;
+  .ant-form-item {
+    margin: 12px 0;
   }
-  .checkout-original {
-    position: absolute;
-    right: 450px;
-    top: 252px;
+  .register-textarea .ant-form-item {
+    width: 70%;
+  }
+  .ant-row {
+    align-items: center;
+  }
+  .checkout-original,
+  .checkin-original {
+    margin-left: 10px;
   }
 }
 
@@ -45,15 +50,5 @@
 @media screen and (min-width: 641px) and (max-width: 940px) {
   .ant-modal {
     width: 80% !important;
-  }
-  .checkin-oringinal {
-    position: absolute;
-    right: 300px !important;
-    top: 140px;
-  }
-  .checkout-original {
-    position: absolute;
-    right: 300px !important;
-    top: 197px;
   }
 }
