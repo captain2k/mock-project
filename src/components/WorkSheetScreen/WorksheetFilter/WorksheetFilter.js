@@ -80,7 +80,6 @@ const WorkSheetFilter = () => {
         page: 1,
       }
     }
-    console.log(paramTimesheetStore)
     dispatch(getParams(paramTimesheetStore))
     dispatch(getWorksheet(paramTimesheetStore))
   }

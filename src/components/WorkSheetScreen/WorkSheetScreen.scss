@@ -69,6 +69,17 @@
           color: $bgPrimary;
         }
       }
+      &:first-child {
+      height: 60px;
+        .ant-pagination-prev , .ant-pagination-item, .ant-pagination-next {
+          display: none;
+        }
+      }
+      &:last-child {
+        .ant-pagination-total-text, .ant-pagination-options {
+          display: none;
+        }
+      }
       .ant-pagination-item {
         margin-right: 0;
         &:hover {
@@ -113,13 +124,21 @@
           }
         }
       }
-      .ant-pagination-options {
-        &::before {
-          content: 'Items per page';
-          font-size: 16px;
-          margin-right: 4px;
-        }
+
+    .ant-pagination-total-text {
+      position: absolute;
+      left: 0;
+      font-size: 16px;
+    }
+    .ant-pagination-options {
+      position: absolute;
+      right: 0;
+      &::before {
+        content: 'Items per page';
+        font-size: 16px;
+        margin-right: 4px;
       }
+    }
      
     } 
   }

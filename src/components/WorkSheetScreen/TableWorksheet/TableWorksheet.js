@@ -49,7 +49,6 @@ const TableWorksheet = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('getFirstData')
     const getFirstData = async () => {
       const res = await axiosPrivate('/worksheet/my-timesheet', {
         params: {
@@ -77,7 +76,6 @@ const TableWorksheet = () => {
 
   useEffect(() => {
     if (currentPage !== 1) return
-    console.log(paramTimesheetStore)
     dispatch(
       worksheetPagination({
         ...paramTimesheetStore,
@@ -278,7 +276,7 @@ const TableWorksheet = () => {
 
   return (
     <>
-      <div className="worksheet-per-page">
+      {/* <div className="worksheet-per-page">
         <h3>{`Totals number of records: ${
           isFirstLoading ? totalRecord : totalRecordStore
         }`}</h3>
@@ -290,7 +288,7 @@ const TableWorksheet = () => {
             <Option value={100}>100</Option>
           </Select>
         </div>
-      </div>
+      </div> */}
       <div className="worksheet-table">
         <Table
           rowClassName={handleHighlight}
@@ -301,13 +299,14 @@ const TableWorksheet = () => {
           scroll={{ y: 240 }}
           pagination={{
             className: 'custom-pagination',
-            position: ['bottomCenter'],
+            position: ['bottomCenter', 'topCenter'],
             locale: { items_per_page: '' },
             pageSizeOptions: ['30', '50', '100'],
             pageSize: pageSize,
             current: currentPageStore,
             showSizeChanger: true,
             total: isFirstLoading ? totalRecord : totalRecordStore,
+            showTotal: (total) => `Totals number of records: ${total}`,
             onChange: handlePagination,
             onShowSizeChange: onShowSizeChange,
             itemRender: (_, type, element) => {
