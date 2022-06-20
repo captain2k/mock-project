@@ -1,11 +1,21 @@
-import { Divider, Select, Table } from 'antd'
+import {
+  DoubleLeftOutlined,
+  DoubleRightOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from '@ant-design/icons'
+import { Button, Divider, Select, Table } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
+  getCurrentPage,
+  getParams,
   getWorksheetData,
   getWorksheetTotal,
   isFirstLoad,
+  paramTimesheet,
+  worksheetPagination,
 } from '../../../store/reducer/worksheetSlice'
 import { handleWorksheetTableData } from '../../../utils/helpers/handleTableData'
 import useAxiosPrivate from '../../../utils/requests/useAxiosPrivate'
@@ -18,6 +28,7 @@ const { Option } = Select
 
 const TableWorksheet = () => {
   const worksheetData = useSelector(getWorksheetData)
+  const paramTimesheetStore = useSelector(paramTimesheet)
   const [isLateEarlyVisible, setIsLateEarlyVisible] = useState(false)
   const [dataLateEarly, setDataLateEarly] = useState()
   const [isLeaveVisible, setIsLeaveVisible] = useState(false)
@@ -25,7 +36,7 @@ const TableWorksheet = () => {
   const [dataRegisterForget, setDataRegisterForget] = useState({})
   const [isShowTimeLog, setIsShowTimeLog] = useState(false)
   const [date, setDate] = useState()
-  // const [perPage, setPerPage] = useState(30)
+  const [currentPage, setCurrentPage] = useState(1)
   const axiosPrivate = useAxiosPrivate()
   const totalRecordStore = useSelector(getWorksheetTotal)
   const today = moment().format('YYYY-MM-DD')
@@ -33,7 +44,12 @@ const TableWorksheet = () => {
   const [firstDataWorksheet, setFirstDataWorksheet] = useState([])
   const [totalRecord, setTotalRecord] = useState(0)
   const isFirstLoading = useSelector(isFirstLoad)
+  const currentPageStore = useSelector(getCurrentPage)
+  const [pageSize, setPageSize] = useState(30)
+  const dispatch = useDispatch()
+
   useEffect(() => {
+    console.log('getFirstData')
     const getFirstData = async () => {
       const res = await axiosPrivate('/worksheet/my-timesheet', {
         params: {
@@ -41,13 +57,35 @@ const TableWorksheet = () => {
           start_date: firstDayOfRecentMonth,
           work_date: 'asc',
           page: 1,
+          per_page: 30,
         },
       })
-      setFirstDataWorksheet(handleWorksheetTableData(res.data.worksheet.data))
+      const { current_page, per_page, total, data } = res.data.worksheet
+      setFirstDataWorksheet(
+        handleWorksheetTableData(
+          data,
+          current_page,
+          per_page,
+          total,
+          res.config.params.work_date,
+        ),
+      )
       setTotalRecord(res.data.worksheet.total)
     }
     getFirstData()
   }, [axiosPrivate, today, firstDayOfRecentMonth])
+
+  useEffect(() => {
+    if (currentPage !== 1) return
+    console.log(paramTimesheetStore)
+    dispatch(
+      worksheetPagination({
+        ...paramTimesheetStore,
+        per_page: pageSize,
+        page: currentPage,
+      }),
+    )
+  }, [pageSize, currentPage, paramTimesheetStore, dispatch])
 
   const columns = [
     {
@@ -59,7 +97,7 @@ const TableWorksheet = () => {
       title: 'Date',
       dataIndex: 'work_date',
       key: 'work_date',
-      width: '20%',
+      width: '180px',
     },
     {
       title: 'Check-in',
@@ -134,15 +172,15 @@ const TableWorksheet = () => {
       title: 'Note',
       dataIndex: 'note',
       key: 'note',
-      width: '60%',
     },
     {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
+      width: '250px',
       render: (text, record, index) => {
         return (
-          <div className="flex">
+          <div>
             <span onClick={() => showRegisterForget(record)}>Forget</span>
             <Divider type="vertical" />
             <span onClick={() => handleLateEarly(record.key)}>Late/Early</span>
@@ -210,12 +248,34 @@ const TableWorksheet = () => {
   }
 
   const handleHighlight = (record, index) => {
-    // const formatDate = record.work_date.slice(0, 10)
-    // console.log(moment(formatDate).isoWeekday(1))
-    // console.log(moment(formatDate).format('YYYY-MM-DD'))
-    // console.log(moment(formatDate).weekday(), formatDate)
-    // console.log(moment.locale())
+    const weekend = record.work_date.slice(11)
+    if (weekend.includes('Sat') || weekend.includes('Sun')) {
+      return 'bg-color-yellow'
+    }
+    return ''
   }
+
+  const onShowSizeChange = (current, page) => {
+    setPageSize(page)
+    dispatch(
+      getParams({
+        ...paramTimesheetStore,
+        per_page: page,
+      }),
+    )
+  }
+
+  const handlePagination = (page, pageSize) => {
+    dispatch(
+      worksheetPagination({
+        ...paramTimesheetStore,
+        per_page: pageSize,
+        page: page,
+      }),
+    )
+    setCurrentPage(page)
+  }
+
   return (
     <>
       <div className="worksheet-per-page">
@@ -237,8 +297,55 @@ const TableWorksheet = () => {
           dataSource={isFirstLoading ? firstDataWorksheet : worksheetData}
           columns={columns}
           bordered
-          pagination={false}
           onRow={handleTimeLog}
+          scroll={{ y: 240 }}
+          pagination={{
+            className: 'custom-pagination',
+            position: ['bottomCenter'],
+            locale: { items_per_page: '' },
+            pageSizeOptions: ['30', '50', '100'],
+            pageSize: pageSize,
+            current: currentPageStore,
+            showSizeChanger: true,
+            total: isFirstLoading ? totalRecord : totalRecordStore,
+            onChange: handlePagination,
+            onShowSizeChange: onShowSizeChange,
+            itemRender: (_, type, element) => {
+              if (type === 'prev') {
+                return (
+                  <>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <DoubleLeftOutlined />
+                    </Button>
+                    <Button>
+                      <LeftOutlined />
+                    </Button>
+                  </>
+                )
+              }
+              if (type === 'next') {
+                return (
+                  <>
+                    <Button>
+                      <RightOutlined />
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <DoubleRightOutlined />
+                    </Button>
+                  </>
+                )
+              }
+              return element
+            },
+          }}
         />
       </div>
 

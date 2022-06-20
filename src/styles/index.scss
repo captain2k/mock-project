@@ -161,3 +161,16 @@ body {
     color: $bgWarning !important;
   }
 }
+
+// Radio Button
+.ant-radio-checked .ant-radio-inner{
+  border-color: $bgPrimary !important ;
+}
+
+.ant-radio-checked .ant-radio-inner:after{
+  background-color: $bgPrimary;
+}
+
+.ant-radio:hover .ant-radio-inner {
+  border-color: $bgPrimary ;
+}

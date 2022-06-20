@@ -1,6 +1,12 @@
 import { convertDateTimeToTime, convertDayToShortDay } from '../convertTime'
 
-const handleWorksheetTableData = (data) => {
+const handleWorksheetTableData = (
+  data,
+  currentPage,
+  perPage,
+  total,
+  sortBy,
+) => {
   const dataSource = data?.map((item, index) => {
     let checkin
     let checkout
@@ -20,9 +26,17 @@ const handleWorksheetTableData = (data) => {
       checkout = '--:--'
     }
 
+    // Handle table ID
+    let tableNo
+    if (sortBy === 'asc') {
+      tableNo = (currentPage - 1) * perPage + index + 1
+    } else {
+      tableNo = total - ((currentPage - 1) * perPage + index)
+    }
+
     return {
       key: item.id,
-      id: index + 1,
+      id: tableNo,
       work_date: convertDayToShortDay(item.work_date),
       checkin: checkin,
       checkout: checkout,

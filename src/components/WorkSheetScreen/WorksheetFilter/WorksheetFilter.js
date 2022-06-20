@@ -3,14 +3,16 @@ import moment from 'moment'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  getParams,
   getWorksheet,
   getWorksheetLoading,
+  paramTimesheet,
 } from '../../../store/reducer/worksheetSlice'
 import { convertMomentToString } from '../../../utils/helpers/convertTime'
 
 const { Option } = Select
 
-const WorkSheetFilter = ({ page }) => {
+const WorkSheetFilter = () => {
   const firstDayOfRecentMonth = moment().startOf('month').format('YYYY-MM-DD')
   const today = moment().format('YYYY-MM-DD')
   const firstDayOfPreviousMonth = moment()
@@ -26,38 +28,43 @@ const WorkSheetFilter = ({ page }) => {
   const [radioValue, setRadioValue] = useState(1)
   const isLoading = useSelector(getWorksheetLoading)
   const dispatch = useDispatch()
+  let paramTimesheetStore = useSelector(paramTimesheet)
 
   const handleSearch = (value) => {
-    let paramTimesheet
     let { radio_filter, select_filter, ...newParam } = value
     if (radio_filter === 1) {
       if (select_filter === 1) {
-        paramTimesheet = {
+        paramTimesheetStore = {
+          ...paramTimesheetStore,
           ...newParam,
           start_date: firstDayOfRecentMonth,
           end_date: today,
-          page: page,
+          page: 1,
         }
       }
       if (select_filter === 2) {
-        paramTimesheet = {
+        paramTimesheetStore = {
+          ...paramTimesheetStore,
           ...newParam,
           start_date: firstDayOfPreviousMonth,
           end_date: lastDayOfPreviousMonth,
-          page: page,
+          page: 1,
         }
       }
       if (select_filter === 3) {
-        paramTimesheet = {
+        paramTimesheetStore = {
+          ...paramTimesheetStore,
           ...newParam,
           start_date: firstDayOfYear,
           end_date: today,
-          page: page,
+          page: 1,
         }
       }
+      const { start_date, end_date, work_date, ...workByDateStore } =
+        paramTimesheetStore
       if (select_filter === 4) {
         const { start_date, end_date, ...workByDate } = newParam
-        paramTimesheet = { ...workByDate, page: page }
+        paramTimesheetStore = { ...workByDate, ...workByDateStore, page: 1 }
       }
     }
     if (radio_filter === 2) {
@@ -65,13 +72,17 @@ const WorkSheetFilter = ({ page }) => {
         message.warning('Invalid date')
         return
       }
-      paramTimesheet = {
+      paramTimesheetStore = {
+        ...paramTimesheetStore,
         ...newParam,
         start_date: convertMomentToString(value.start_date),
         end_date: convertMomentToString(value.end_date),
+        page: 1,
       }
     }
-    dispatch(getWorksheet(paramTimesheet))
+    console.log(paramTimesheetStore)
+    dispatch(getParams(paramTimesheetStore))
+    dispatch(getWorksheet(paramTimesheetStore))
   }
 
   const handleReset = () => {
