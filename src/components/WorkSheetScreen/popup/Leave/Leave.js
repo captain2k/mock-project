@@ -57,8 +57,6 @@ export default function Leave({ data, isLeaveVisible, setIsLeaveVisible }) {
     // },
   }
 
-  console.log(data)
-
   // Handle Click
   const handleOk = () => {
     setIsLeaveVisible(false)

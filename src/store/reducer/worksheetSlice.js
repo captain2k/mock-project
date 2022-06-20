@@ -63,6 +63,7 @@ const worksheetSlice = createSlice({
     },
     currentPage: 1,
     perPage: 30,
+    lastPage: 1,
   },
   reducers: {
     getParams: (state, action) => {
@@ -72,7 +73,8 @@ const worksheetSlice = createSlice({
   extraReducers: {
     [getWorksheet.fulfilled]: (state, action) => {
       const sortBy = action.meta.arg.work_date
-      const { current_page, per_page, total, data } = action.payload.worksheet
+      const { current_page, per_page, total, data, last_page } =
+        action.payload.worksheet
       state.totalRecord = total
       state.currentPage = current_page
       const result = handleWorksheetTableData(
@@ -85,6 +87,7 @@ const worksheetSlice = createSlice({
       state.worksheet = result
       state.isLoading = false
       state.isFirstLoad = false
+      state.lastPage = last_page
     },
     [getWorksheet.pending]: (state, action) => {
       state.worksheet = []
@@ -100,7 +103,8 @@ const worksheetSlice = createSlice({
     },
     [worksheetPagination.fulfilled]: (state, action) => {
       const sortBy = action.meta.arg.work_date
-      const { current_page, per_page, total, data } = action.payload.worksheet
+      const { current_page, per_page, total, data, last_page } =
+        action.payload.worksheet
       state.totalRecord = total
       state.currentPage = current_page
       const result = handleWorksheetTableData(
@@ -111,6 +115,7 @@ const worksheetSlice = createSlice({
         sortBy,
       )
       state.worksheet = result
+      state.lastPage = last_page
     },
   },
 })
@@ -123,3 +128,4 @@ export const getWorksheetTotal = (state) => state.worksheetReducer.totalRecord
 export const isFirstLoad = (state) => state.worksheetReducer.isFirstLoad
 export const paramTimesheet = (state) => state.worksheetReducer.paramTimesheet
 export const getCurrentPage = (state) => state.worksheetReducer.currentPage
+export const getLastPage = (state) => state.worksheetReducer.lastPage

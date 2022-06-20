@@ -4,12 +4,13 @@ import {
   LeftOutlined,
   RightOutlined,
 } from '@ant-design/icons'
-import { Button, Divider, Select, Table } from 'antd'
+import { Button, Divider, Table } from 'antd'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getCurrentPage,
+  getLastPage,
   getParams,
   getWorksheetData,
   getWorksheetTotal,
@@ -23,8 +24,6 @@ import LateEarly from '../popup/LateEarly/LateEarly'
 import Leave from '../popup/Leave/Leave'
 import RegisterForget from '../popup/RegisterForget/RegisterForget'
 import TimeLog from '../TimeLog/TimeLog'
-
-const { Option } = Select
 
 const TableWorksheet = () => {
   const worksheetData = useSelector(getWorksheetData)
@@ -46,6 +45,7 @@ const TableWorksheet = () => {
   const [totalRecord, setTotalRecord] = useState(0)
   const isFirstLoading = useSelector(isFirstLoad)
   const currentPageStore = useSelector(getCurrentPage)
+  const lastPageStore = useSelector(getLastPage)
   const [pageSize, setPageSize] = useState(30)
   const dispatch = useDispatch()
 
@@ -286,19 +286,6 @@ const TableWorksheet = () => {
 
   return (
     <>
-      {/* <div className="worksheet-per-page">
-        <h3>{`Totals number of records: ${
-          isFirstLoading ? totalRecord : totalRecordStore
-        }`}</h3>
-        <div className="per-page-select">
-          <label>Items per page</label>
-          <Select defaultValue={30}>
-            <Option value={30}>30</Option>
-            <Option value={50}>50</Option>
-            <Option value={100}>100</Option>
-          </Select>
-        </div>
-      </div> */}
       <div className="worksheet-table">
         <Table
           rowClassName={handleHighlight}
@@ -326,6 +313,12 @@ const TableWorksheet = () => {
                     <Button
                       onClick={(e) => {
                         e.stopPropagation()
+                        dispatch(
+                          worksheetPagination({
+                            ...paramTimesheetStore,
+                            page: 1,
+                          }),
+                        )
                       }}
                     >
                       <DoubleLeftOutlined />
@@ -345,6 +338,12 @@ const TableWorksheet = () => {
                     <Button
                       onClick={(e) => {
                         e.stopPropagation()
+                        dispatch(
+                          worksheetPagination({
+                            ...paramTimesheetStore,
+                            page: lastPageStore,
+                          }),
+                        )
                       }}
                     >
                       <DoubleRightOutlined />
