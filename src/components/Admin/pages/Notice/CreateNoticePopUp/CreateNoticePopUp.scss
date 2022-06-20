@@ -1,0 +1,13 @@
+.create-notice-popup {
+}
+
+.create-notice-buttons {
+  display: flex;
+  justify-content: center;
+
+  .wrap-buttons {
+    display: flex;
+    width: 180px;
+    justify-content: space-between;
+  }
+}

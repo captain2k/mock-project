@@ -10,7 +10,7 @@ import {
 } from 'antd'
 import 'antd/dist/antd.min.css'
 import moment from 'moment'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getSubmitLateEarlyLoading,
@@ -37,16 +37,17 @@ export default function LateEarly({
   setIsLateEarlyVisible,
 }) {
   // lấy từ bảng worksheet */
-  const registerForDate = moment(data?.work_date).format('DD-MM-YYYY')
+  const registerForDateData = data?.request_for_date || data?.work_date
+  const registerForDate = moment(registerForDateData).format('DD-MM-YYYY')
   const checkinData = data?.checkin_original || data?.checkin
   const checkInTime = checkinData ? moment(checkinData).format('HH:mm') : ''
   const checkoutData = data?.checkout_original || data?.checkout
   const checkOutTime = checkoutData ? moment(checkoutData).format('HH:mm') : ''
   const lateTime = calculateTime(checkInTime, '08:30')
   const earlyTime = calculateTime('17:30', checkOutTime)
-  // eslint-disable-next-line
   const [overtime, setOvertime] = useState('00:00')
   const [overtimeNumber, setOvertimeNumber] = useState(0)
+  const [dateBefore, setDateBefore] = useState('')
 
   const { Text } = Typography
   const [form] = Form.useForm()
@@ -93,7 +94,7 @@ export default function LateEarly({
     setIsLateEarlyVisible(false)
   }
 
-  const onFinish = (values, e) => {
+  const onFinish = (values) => {
     const newRequest = {
       request_type: 4,
       request_for_date: changeFormatDate(registerForDate),
@@ -136,11 +137,20 @@ export default function LateEarly({
     (lateNumber > 0 ? lateNumber : 0) + (earlyNumber > 0 ? earlyNumber : 0)
   const requestTime = changeTimeNumberToHour(requestTimeNumber)
 
-  // get date, time
-  const date = moment().format('DD-MM-YYYY')
   // format datePicker
   const dateFormat = 'DD/MM/YYYY'
-  const dateBefore = moment().subtract(1, 'days').format('DD/MM/YYYY')
+  // const dateBefore = moment().subtract(1, 'days').format('DD/MM/YYYY')
+  let date = moment().day()
+
+  useEffect(() => {
+    if (date === 1) {
+      setDateBefore(moment().subtract(3, 'days').format('DD/MM/YYYY'))
+    } else {
+      setDateBefore(moment().subtract(1, 'days').format('DD/MM/YYYY'))
+    }
+    // eslint-disable-next-line
+  }, [])
+
   return (
     <Modal
       title="Register Late Early"
@@ -158,9 +168,8 @@ export default function LateEarly({
           <Col>
             <Row>
               <p className="date">
-                {data?.created_at
-                  ? moment(data?.created_at).format('DD-MM-YYYY HH:mm')
-                  : date}
+                {data?.created_at &&
+                  moment(data?.created_at).format('DD-MM-YYYY HH:mm')}
               </p>
             </Row>
           </Col>
@@ -204,6 +213,7 @@ export default function LateEarly({
           validateMessages={validateMessages}
           initialValues={{
             'date-cover-up': moment(dateBefore, dateFormat),
+            reason: data?.reason,
           }}
         >
           <Row>
@@ -305,7 +315,7 @@ export default function LateEarly({
                     onClick={handleCancel}
                     className="outline-secondary-button"
                   >
-                    Close
+                    Cancel
                   </Button>
                 </>
               )}

@@ -82,6 +82,7 @@ const noticeSlice = createSlice({
   name: 'noticeSlice',
   initialState: {
     notices: null,
+    loadingNotice: true,
     noticeDetail: {
       detail: null,
       toDepartment: null,
@@ -92,13 +93,20 @@ const noticeSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getNotice.pending, (state) => {
+      state.loadingNotice = true
+    })
     builder.addCase(getNotice.fulfilled, (state, action) => {
+      state.loadingNotice = false
       state.notices = action.payload
       state.homeTable = handleHomeTableData(
         action.payload?.official_notice.data,
         action.payload?.official_notice,
         action.meta.arg.order_published_date,
       )
+    })
+    builder.addCase(getNotice.rejected, (state) => {
+      state.loadingNotice = false
     })
     builder.addCase(getNoticeDetail.fulfilled, (state, action) => {
       state.noticeDetail.detail = action.payload
@@ -110,5 +118,6 @@ const noticeSlice = createSlice({
 
 export default noticeSlice.reducer
 export const getNoticeState = (state) => state.homeReducer.notices
+export const getLoadingNotice = (state) => state.homeReducer.loadingNotice
 export const getNoticeDetailState = (state) => state.homeReducer.noticeDetail
 export const getHomeTable = (state) => state.homeReducer.homeTable

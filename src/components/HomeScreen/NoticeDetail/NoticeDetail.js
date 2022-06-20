@@ -28,6 +28,11 @@ const NoticeDetail = ({ toggleModal, setToggleModal }) => {
   const { detail, toDepartment, publishedDate } = noticeDetail
   const notice_detail = detail?.notice_detail
 
+  const styles = {
+    top: 30,
+    overflow: 'auto',
+  }
+
   return (
     <Modal
       title="Notice Detail"
@@ -36,9 +41,12 @@ const NoticeDetail = ({ toggleModal, setToggleModal }) => {
       onCancel={handleCancel}
       footer={null}
       className="notice-detail-modal"
+      width="80%"
+      height="90%"
+      style={styles}
     >
       <Row>
-        <Col span={12}>
+        <Col span={8}>
           <h3>Author</h3>
           <p>
             <UserOutlined style={{ color: '#7367f0', marginRight: 5 }} />
@@ -57,7 +65,7 @@ const NoticeDetail = ({ toggleModal, setToggleModal }) => {
             <strong>Phone:</strong> {notice_detail?.author?.phone}
           </p>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <h3>To Department</h3>
           <p>
             <RightCircleTwoTone

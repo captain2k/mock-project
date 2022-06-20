@@ -1,5 +1,5 @@
-@import 'reset';
-@import 'color';
+@import "reset";
+@import "color";
 
 @font-face {
   font-family: Montserrat;
@@ -27,9 +27,13 @@
   border-color: $bgPrimary !important;
 }
 body {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 
   //Button
+  .ant-btn {
+    border-radius: 4px;
+  }
+
   .primary-button {
     background-color: $bgPrimary;
     color: #fff;
@@ -109,10 +113,6 @@ body {
   }
 
   .ant-input {
-    // &:hover {
-    //   border-color: $bgPrimary;
-    //   box-shadow: 0 0 0 2px $blurPrimaryInput;
-    // }
     &:focus {
       border-color: $bgPrimary;
       box-shadow: 0 0 0 2px $blurPrimaryInput;
@@ -144,8 +144,7 @@ body {
     }
   }
 
-  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
-    .ant-select-selector {
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-color: $bgPrimary;
     box-shadow: 0 0 0 2px $blurPrimaryInput;
   }

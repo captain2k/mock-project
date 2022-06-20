@@ -1,0 +1,16 @@
+.notice {
+  position: relative;
+  height: 100%;
+
+  .outline-primary-button {
+    height: 45px;
+    border-radius: 30px;
+    font-weight: 600;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    .icon {
+      font-size: 18px;
+    }
+  }
+}

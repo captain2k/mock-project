@@ -15,6 +15,7 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
 
   const onFinish = (values) => {
     dispatch(changePass(values))
+    setToggleModal(false)
     form.setFieldsValue({
       oldPassword: '',
       confirmPassword: '',
@@ -45,7 +46,7 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
   return (
     <Modal
       className="modalChangePass"
-      title="Change Pass"
+      title="Change Password"
       visible={toggleModal}
       onCancel={handleCancel}
       closeIcon={<XIcon />}
@@ -63,6 +64,7 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
         <Form.Item
           label="Old password"
           name="oldPassword"
+          validateFirst={true}
           rules={[
             {
               warningOnly: true,
@@ -73,11 +75,11 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
             },
             {
               min: 8,
-              message: 'Password must have at least 8 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               max: 32,
-              message: 'Password has at most 32 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               pattern: /(^\S*$)/g,
@@ -90,6 +92,7 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
         <Form.Item
           label="New password"
           name="newPassword"
+          validateFirst={true}
           rules={[
             {
               warningOnly: true,
@@ -100,11 +103,11 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
             },
             {
               min: 8,
-              message: 'Password must have at least 8 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               max: 32,
-              message: 'Password has at most 32 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               pattern: /(^\S*$)/g,
@@ -117,6 +120,7 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
         <Form.Item
           label="Confirm new password"
           name="confirmPassword"
+          validateFirst={true}
           rules={[
             {
               warningOnly: true,
@@ -127,11 +131,11 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
             },
             {
               min: 8,
-              message: 'Password must have at least 8 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               max: 32,
-              message: 'Password has at most 32 characters',
+              message: 'Password must be between 8 and 32 characters',
             },
             {
               pattern: /(^\S*$)/g,
@@ -166,18 +170,18 @@ const ChangePassPopup = ({ toggleModal, setToggleModal }) => {
           </Col>
           <Col className="mr-20">
             <Form.Item>
-              <Button className="outline-primary-button" onClick={onFill}>
-                Reset
-              </Button>
-            </Form.Item>
-          </Col>
-          <Col>
-            <Form.Item>
               <Button
                 className="outline-secondary-button"
                 onClick={handleCancel}
               >
                 Cancel
+              </Button>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item>
+              <Button className="outline-primary-button" onClick={onFill}>
+                Reset
               </Button>
             </Form.Item>
           </Col>

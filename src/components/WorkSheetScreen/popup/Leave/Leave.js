@@ -4,6 +4,7 @@ import {
   Col,
   Form,
   Input,
+  message,
   Modal,
   Radio,
   Row,
@@ -12,14 +13,18 @@ import {
 import 'antd/dist/antd.min.css'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
+import { calculateTime } from '../../../../utils/helpers/handleTime'
 import changeTimeToMint from '../../../../utils/helpers/handleTime/changeTimeToMint'
 import './Leave.scss'
 
-export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
+export default function Leave({ data, isLeaveVisible, setIsLeaveVisible }) {
   // lấy từ bảng worksheet
-  const registerForDate = '19-2-2022'
-  const checkInTime = '08:15'
-  const checkOutTime = '16:01'
+  const registerForDateData = data?.request_for_date || data?.work_date
+  const registerForDate = moment(registerForDateData).format('DD-MM-YYYY')
+  const checkinData = data?.checkin_original || data?.checkin
+  const checkInTime = checkinData ? moment(checkinData).format('HH:mm') : ''
+  const checkoutData = data?.checkout_original || data?.checkout
+  const checkOutTime = checkoutData ? moment(checkoutData).format('HH:mm') : ''
   const workTime = '07:00'
   const lackTime = '01:00'
   // eslint-disable-next-line
@@ -30,7 +35,9 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
   const [rangeStart, setRangeStart] = useState('')
   const [rangeEnd, setRangeEnd] = useState('')
   // eslint-disable-next-line
-  const [timeCount, setTimeCount] = useState('')
+  const [timeCount, setTimeCount] = useState('00:00')
+
+  const [form] = Form.useForm()
 
   const format = 'HH:mm'
   const layout = {
@@ -50,12 +57,20 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
     // },
   }
 
+  console.log(data)
+
   // Handle Click
   const handleOk = () => {
     setIsLeaveVisible(false)
   }
   const handleCancel = () => {
     setIsLeaveVisible(false)
+    form.setFieldsValue({
+      start_time: moment('00:00', format),
+      end_time: moment('00:00', format),
+      paid_unpaid: 1,
+    })
+    setTimeCount('')
   }
 
   const onFinish = (values) => {
@@ -105,7 +120,16 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
   const lackNumber = changeTimeToMint(workTime)
   const workNumber = changeTimeToMint(lackTime)
 
-  useEffect(() => {}, [rangeEnd, rangeStart])
+  useEffect(() => {
+    const rangeStartNumber = changeTimeToMint(rangeStart ? rangeStart : '00:00')
+    const rangeEndNumber = changeTimeToMint(rangeEnd ? rangeEnd : '00:00')
+    if (rangeEndNumber < rangeStartNumber) {
+      message.error('Please choose another time!')
+    } else {
+      const timeCount = calculateTime(rangeEnd, rangeStart)
+      setTimeCount(timeCount)
+    }
+  }, [rangeEnd, rangeStart])
   // get date, time
   const today = new Date()
   const date =
@@ -121,7 +145,7 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
       width="80%"
       okText="Register"
       okButtonProps={{ style: { marginRight: '20px' } }}
-      className="modal_late_early"
+      className="modal_leave"
       footer={null}
     >
       <div className="container">
@@ -174,6 +198,7 @@ export default function Leave({ isLeaveVisible, setIsLeaveVisible }) {
         </Row>
 
         <Form
+          form={form}
           {...layout}
           name="nest-messages"
           onFinish={onFinish}

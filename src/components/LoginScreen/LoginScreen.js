@@ -77,6 +77,7 @@ const LoginScreen = () => {
             <Form.Item
               label="Password"
               name="password"
+              validateFirst={true}
               rules={[
                 {
                   required: true,
@@ -84,11 +85,11 @@ const LoginScreen = () => {
                 },
                 {
                   min: 8,
-                  message: 'Password contains at least 8 characters',
+                  message: 'Password must be between 8 and 32 characters',
                 },
                 {
                   max: 32,
-                  message: 'Password contains at most 32 characters',
+                  message: 'Password must be between 8 and 32 characters',
                 },
                 {
                   pattern: /(^\S*$)/g,

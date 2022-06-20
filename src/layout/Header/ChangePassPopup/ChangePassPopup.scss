@@ -1,4 +1,4 @@
-@import "../../../styles/color";
+@import '../../../styles/color';
 
 .formChangePass {
   width: 100%;
@@ -27,6 +27,14 @@
 
     .mr-20 {
       margin-right: 20px;
+    }
+
+    .ant-form-item {
+      margin: 0px;
+    }
+
+    button {
+      width: 80px;
     }
   }
 }

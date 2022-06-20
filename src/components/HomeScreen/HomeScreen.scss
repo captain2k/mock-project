@@ -1,6 +1,23 @@
 @import '../../styles/color';
 
 .home-screen {
+  //Scroll
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px $bgPrimary;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $bgPrimary;
+    border-radius: 10px;
+  }
   background-color: $bgLogin;
   padding-left: 64px;
   padding-right: 64px;
@@ -35,8 +52,25 @@
         }
       }
       .ant-table-thead {
-        th {
-          background-color: #f3f2f7;
+        tr {
+          th {
+            &:nth-child(7) {
+              border-right: none;
+            }
+            background-color: #f3f2f7;
+            &:last-child() {
+              border-right: none;
+            }
+          }
+        }
+
+        .ant-table-cell {
+          &:last-of-type {
+            border-right: none;
+          }
+        }
+        .ant-table-cell-scrollbar:not([rowspan]) {
+          box-shadow: none;
         }
         .ant-table-column-sorter-up.active {
           color: $bgPrimary;

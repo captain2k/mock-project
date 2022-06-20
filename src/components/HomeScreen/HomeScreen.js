@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   DoubleLeftOutlined,
   DoubleRightOutlined,
@@ -8,8 +9,10 @@ import { Button, Table } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import CustomSpin from '../../common/CustomSpin/CustomSpin'
 import {
   getHomeTable,
+  getLoadingNotice,
   getNotice,
   getNoticeDetail,
   getNoticeState,
@@ -25,23 +28,25 @@ const HomeScreen = () => {
   const [oderPublishedDate, setOderPublishedDate] = useState('desc')
   const [pageSize, setPageSize] = useState(10)
   const [toggleModal, setToggleModal] = useState(false)
-  const homeScreen = useRef(null)
+  const homeScreen = useRef()
   const dispatch = useDispatch()
   const notice = useSelector(getNoticeState)
   const dataSource = useSelector(getHomeTable)
+  const loadingNotice = useSelector(getLoadingNotice)
   useEffect(() => {
     document.title = 'Home'
   }, [])
+
   // Get notices
   useEffect(() => {
     dispatch(
       getNotice({
-        page: 1,
+        page: currentPage,
         per_page: pageSize,
         order_published_date: oderPublishedDate,
       }),
     )
-  }, [dispatch, oderPublishedDate, pageSize])
+  }, [dispatch, oderPublishedDate, pageSize, currentPage])
 
   const handleShowNoticeDetail = (rowId, toDepartment, publishedDate) => {
     setToggleModal(true)
@@ -56,8 +61,10 @@ const HomeScreen = () => {
     // Calculate home screen height
     const headerHeight = calculateComponentHeight('.navbar')
     const windowHeight = window.innerHeight
-    homeScreen.current.style.paddingTop = headerHeight + 'px'
-    homeScreen.current.style.height = windowHeight + 'px'
+    if (homeScreen.current) {
+      homeScreen.current.style.paddingTop = headerHeight + 'px'
+      homeScreen.current.style.height = windowHeight + 'px'
+    }
     // Calculate table scroll height
     const PAGINATION_MARGIN_TOP = 16
     const HOME_SCREEN_PADDING_BOTTOM = 32
@@ -81,8 +88,10 @@ const HomeScreen = () => {
       // Calculate home screen height
       const headerHeight = calculateComponentHeight('.navbar')
       const windowHeight = window.innerHeight
-      homeScreen.current.style.paddingTop = headerHeight + 'px'
-      homeScreen.current.style.height = windowHeight + 'px'
+      if (homeScreen.current) {
+        homeScreen.current.style.paddingTop = headerHeight + 'px'
+        homeScreen.current.style.height = windowHeight + 'px'
+      }
       // Calculate table scroll height
       const PAGINATION_MARGIN_TOP = 16
       const HOME_SCREEN_PADDING_BOTTOM = 32
@@ -104,13 +113,6 @@ const HomeScreen = () => {
   }, [])
 
   const onPageChange = (page, pageSize) => {
-    dispatch(
-      getNotice({
-        page,
-        per_page: pageSize,
-        order_published_date: oderPublishedDate,
-      }),
-    )
     setCurrentPage(page)
   }
 
@@ -205,6 +207,7 @@ const HomeScreen = () => {
             dataSource={[...dataSource]}
             columns={columns}
             bordered
+            loading={{ indicator: <CustomSpin />, spinning: loadingNotice }}
             rowClassName={(record, index) => {
               if (index % 2 === 0) {
                 return 'evenRow'
@@ -243,6 +246,7 @@ const HomeScreen = () => {
                           )
                           setCurrentPage(1)
                         }}
+                        disabled={currentPage === 1}
                       >
                         <DoubleLeftOutlined />
                       </Button>
@@ -271,6 +275,9 @@ const HomeScreen = () => {
                           )
                           setCurrentPage(notice?.official_notice.last_page || 1)
                         }}
+                        disabled={
+                          currentPage === notice?.official_notice.last_page
+                        }
                       >
                         <DoubleRightOutlined />
                       </Button>

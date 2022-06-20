@@ -1,0 +1,50 @@
+@import "../../Admin.scss";
+$admin-margin: 20px;
+.admin-header {
+  background-color: white;
+  border-radius: 7px;
+  margin-top: 20px;
+  width: 100%;
+  height: 60px;
+  box-shadow: $boxshadow;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-header-left {
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  .admin-icon {
+    font-size: 20px;
+    padding: 0;
+    margin-left: $admin-margin;
+  }
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .admin-name {
+    text-align: right;
+    margin-right: 10px !important;
+  }
+
+  .kind {
+    font-size: 13px;
+    color: rgb(158, 158, 158);
+  }
+
+  .header-item {
+    margin-right: $admin-margin;
+  }
+}

@@ -1,4 +1,3 @@
-import Admin from '../components/Admin/Admin'
 import HomeScreen from '../components/HomeScreen/HomeScreen'
 import LoginScreen from '../components/LoginScreen/LoginScreen'
 import PageNotFound from '../components/PageNotFound/PageNotFound'
@@ -16,6 +15,5 @@ const otherRoutes = [
 const privateRoutes = [
   { path: '', component: HomeScreen },
   { path: 'worksheet', component: WorkSheetScreen },
-  { path: 'admin', component: Admin },
 ]
 export { publicRoutes, privateRoutes, otherRoutes }
